@@ -1,0 +1,44 @@
+{
+  "aironet-1131ag.jpg": {
+    "title": "Cisco Aironet 1131AG - Close.jpg",
+    "author": "Xosema",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Cisco_Aironet_1131AG_-_Close.jpg"
+  },
+  "aironet-1100.jpg": {
+    "title": "Cisco Aironet 1100.jpg",
+    "author": "Huhbakker",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Cisco_Aironet_1100.jpg"
+  },
+  "patch-antenna-24ghz.jpg": {
+    "title": "Antenne patch 2.4 GHz.JPG",
+    "author": "Serge Nueffer (French Wikipedia)",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Antenne_patch_2.4_GHz.JPG"
+  },
+  "yagi-wifi.jpg": {
+    "title": "Yagi-Uda antenna for Wi-Fi on Router.jpg",
+    "author": "LordOider",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Yagi-Uda_antenna_for_Wi-Fi_on_Router.jpg"
+  },
+  "omni-antenna.jpg": {
+    "title": "Wifi antenna2010.JPG",
+    "author": "Besjaner",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Wifi_antenna2010.JPG"
+  },
+  "wifi6-router-back.jpg": {
+    "title": "TP-Link AX1500 Wi-Fi 6 Router Back.jpg",
+    "author": "Abhi25t",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:TP-Link_AX1500_Wi-Fi_6_Router_Back.jpg"
+  }
+}

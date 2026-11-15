@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup SQLite CCNA Learn
+
+[Service]
+Type=oneshot
+User=pi
+WorkingDirectory=/opt/ccna-learn
+Environment=DATA_DIR=/opt/ccna-learn/data
+Environment=BACKUP_KEEP=14
+ExecStart=/usr/bin/node server/dist/backup.js

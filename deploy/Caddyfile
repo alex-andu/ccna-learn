@@ -1,0 +1,8 @@
+# HTTPS în rețeaua locală (necesar pentru instalarea ca aplicație/PWA pe telefon).
+# Înlocuiește ccna.lan cu numele/IP-ul Pi-ului. "tls internal" = CA local Caddy;
+# instalează certificatul rădăcină (vezi README) pe telefon/laptop.
+ccna.lan, 192.168.1.50 {
+	tls internal
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+}
