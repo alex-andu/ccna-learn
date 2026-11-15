@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Icon } from './Icon';
-import attribution from '../../public/img/wiki/attribution.json';
+import { ATTRIBUTION, type Attr } from '../lib/attribution';
 
 export function Summary({ children }: { children: ReactNode }) {
   return <div className="layer summary"><div className="layer-h"><span className="dot" />Pe scurt</div><div className="layer-b">{children}</div></div>;
@@ -45,8 +45,7 @@ export function Figure({ children, caption }: { children: ReactNode; caption?: R
   return <figure className="figure">{children}{caption && <figcaption>{caption}</figcaption>}</figure>;
 }
 
-type Attr = { title: string; author: string; license: string; licenseUrl: string; source: string };
-const ATTR = attribution as Record<string, Attr>;
+const ATTR: Record<string, Attr> = ATTRIBUTION;
 export function Photo({ file, caption }: { file: string; caption: ReactNode }) {
   const a = ATTR[file];
   return (

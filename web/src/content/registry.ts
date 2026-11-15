@@ -1,19 +1,15 @@
-export type TocItem = { id: string; label: string; code?: string; sub?: boolean };
+import type { TocItem, TopicModule } from './types';
+import { T1_11 } from './t1_11';
+
+export type { TocItem, TopicModule };
+
+/** Toate topicurile cu conținut. Ca să adaugi unul: creează content/<tX_Y>/index.tsx și pune-l aici. */
+export const TOPICS: TopicModule[] = [T1_11];
+
+export const TOPIC_MODULES: Record<string, TopicModule> = Object.fromEntries(TOPICS.map((t) => [t.id, t]));
 
 /** Secțiunile fiecărui topic disponibil — folosite pentru TOC și pentru calculul progresului. */
-export const TOPIC_SECTIONS: Record<string, TocItem[]> = {
-  '1.11': [
-    { id: 'intro', label: 'Imaginea de ansamblu', code: '1.11' },
-    { id: 'rf', label: 'RF și standardele 802.11', code: '1.11.c' },
-    { id: 'channels', label: 'Canale care nu se suprapun', code: '1.11.a' },
-    { id: 'ssid', label: 'SSID, BSS, ESS', code: '1.11.b' },
-    { id: 'encryption', label: 'Criptare WEP → WPA3', code: '1.11.d' },
-    { id: 'config', label: 'Exemple de configurare' },
-    { id: 'questions', label: 'Întrebări (toate)' },
-    { id: 'lab-guided', label: 'Lab ghidat' },
-    { id: 'lab-solo', label: 'Lab solo' },
-  ],
-};
+export const TOPIC_SECTIONS: Record<string, TocItem[]> = Object.fromEntries(TOPICS.map((t) => [t.id, t.sections]));
 
 export const topicProgress = (topicId: string, done: Set<string> | undefined) => {
   const s = TOPIC_SECTIONS[topicId];
