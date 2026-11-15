@@ -277,7 +277,7 @@ function expire(table: Entry[], now: number, aging: number) {
 }
 function sendFrame(s: SimState, src: HostId, dst: Dst, aging: number, label: string): SimState {
   const now = s.now + 5;
-  let table = expire(s.table, now, aging).map((e) => ({ ...e, fresh: undefined }));
+  let table: Entry[] = expire(s.table, now, aging).map((e) => ({ ...e, fresh: undefined }));
   const ingress = s.hp[src];
   const mac = HOSTS[src].mac;
   // 1) LEARN pe baza MAC-ului SURSĂ
@@ -285,9 +285,10 @@ function sendFrame(s: SimState, src: HostId, dst: Dst, aging: number, label: str
   const ex = table.find((e) => e.mac === mac);
   if (ex?.stat) learn = 'static';
   else if (ex) {
-    if (ex.port !== ingress) { learn = 'move'; prevPort = ex.port; }
-    else learn = 'refresh';
-    table = table.map((e) => (e.mac === mac ? { ...e, port: ingress, seen: now, fresh: learn as Entry['fresh'] } : e));
+    const fresh: 'move' | 'refresh' = ex.port !== ingress ? 'move' : 'refresh';
+    if (fresh === 'move') prevPort = ex.port;
+    learn = fresh;
+    table = table.map((e) => (e.mac === mac ? { ...e, port: ingress, seen: now, fresh } : e));
   } else table = [...table, { mac, host: src, port: ingress, seen: now, fresh: 'new' }];
   // 2) FORWARD / FLOOD / FILTER pe baza MAC-ului DESTINAȚIE
   const connected = PORTS.filter((p) => Object.values(s.hp).includes(p));
