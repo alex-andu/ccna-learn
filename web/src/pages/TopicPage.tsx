@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { findObjective, AVAILABLE } from '../data/curriculum';
-import { TOPIC_SECTIONS, topicProgress } from '../content/registry';
+import { findObjective } from '../data/curriculum';
+import { TOPIC_MODULES, TOPIC_SECTIONS, topicProgress } from '../content/registry';
 import { useStore } from '../lib/store';
 import { Icon } from '../components/Icon';
-import { Intro, RF, Channels, SSID, Encryption } from '../content/t1_11/Theory';
-import { ConfigExamples } from '../content/t1_11/Config';
-import { GuidedLab, SoloLab } from '../content/t1_11/Labs';
 import { TopicQuestions } from '../components/TopicQuestions';
 import { SectionHead } from '../components/SectionHead';
 import { NotesPanel } from '../components/NotesPanel';
@@ -30,6 +27,7 @@ export function TopicPage() {
   const obj = findObjective(topicId);
   const loc = useLocation();
   const { progress, bookmarks, toggleBookmark } = useStore();
+  const mod = TOPIC_MODULES[topicId];
   const sections = TOPIC_SECTIONS[topicId] ?? [];
   const active = useScrollSpy(sections.map((s) => s.id));
 
@@ -44,7 +42,7 @@ export function TopicPage() {
     <div className="crumbs"><Link to="/curriculum">Curriculum</Link><span>›</span><span>{obj.domain.id}.0 {obj.domain.title}</span><span>›</span><span>{obj.id}</span></div>
   );
 
-  if (!AVAILABLE.has(topicId)) {
+  if (!mod) {
     return (
       <div className="page narrow">
         {crumbs}
@@ -57,7 +55,7 @@ export function TopicPage() {
         <div className="card center">
           <Icon name="lock" size={28} />
           <h3>Conținut în pregătire</h3>
-          <p className="muted">Acest topic urmează după validarea pilotului <Link to="/topic/1.11">1.11 Wireless principles</Link>. Între timp poți să-ți iei notițe aici.</p>
+          <p className="muted">Acest topic se adaugă iterativ, în ordinea curriculei. Între timp poți să-ți iei notițe aici.</p>
         </div>
         <h3>Notițele mele</h3>
         <NotesPanel topicId={topicId} />
@@ -80,12 +78,12 @@ export function TopicPage() {
               </button>
             </div>
             <h1 style={{ margin: '8px 0 6px' }}>{obj.title}</h1>
-            <div className="muted">Principiile rețelelor wireless — RF, canale, SSID, criptare</div>
+            <div className="muted">{mod.subtitle}</div>
             <ul className="objective-list">{obj.subs.map((s) => <li key={s.id}><span className="mono">{s.id}</span>{s.title}</li>)}</ul>
             <div className="row" style={{ marginTop: 16, gap: 14 }}>
-              <span className="badge">⏱ ≈3–4 h studiu + laburi</span>
+              <span className="badge">⏱ {mod.studyTime}</span>
               <span className="badge">{nq} întrebări</span>
-              <span className="badge">2 laburi Packet Tracer</span>
+              <span className="badge">{mod.labs} {mod.labs === 1 ? 'lab' : 'laburi'} Packet Tracer</span>
               <span className="badge accent">{pct}% parcurs</span>
             </div>
             <div className="progress" style={{ marginTop: 12 }}><span style={{ width: `${pct}%` }} /></div>
@@ -94,19 +92,13 @@ export function TopicPage() {
             </p>
           </div>
 
-          <Intro />
-          <RF />
-          <Channels />
-          <SSID />
-          <Encryption />
-          <ConfigExamples />
+          <mod.Body />
           <section id="questions" className="section">
-            <SectionHead id="questions" code="1.11" title="Întrebări — banca completă a topicului" />
+            <SectionHead id="questions" code={topicId} title="Întrebări — banca completă a topicului" />
             <p className="muted">Mod antrenament: răspunde, apoi <b>Verifică</b>, sau apasă <b>Arată răspunsul</b>. Fiecare variantă are explicație. Greșelile intră automat în Repetare (FSRS).</p>
             <TopicQuestions topicId={topicId} subs={obj.subs} />
           </section>
-          <GuidedLab />
-          <SoloLab />
+          <mod.Labs />
           <section id="notes" className="section">
             <div className="section-head"><span className="section-code">✎</span><h2>Notițele mele</h2><span className="spacer" />
               <Link className="btn sm" to={`/fise/${topicId}`}><Icon name="print" size={15} />Cheat sheet</Link></div>

@@ -1,10 +1,12 @@
 import type { ComponentType } from 'react';
+import { TOPICS } from '../content/registry';
 import { Link, useParams } from 'react-router-dom';
-import { CheatSheet111 } from '../content/t1_11/CheatSheet';
 import { findObjective } from '../data/curriculum';
 import { Icon } from '../components/Icon';
 
-const SHEETS: Record<string, ComponentType> = { '1.11': CheatSheet111 };
+const SHEETS: Record<string, ComponentType> = Object.fromEntries(
+  TOPICS.filter((t) => t.CheatSheet).map((t) => [t.id, t.CheatSheet!]),
+);
 
 export function CheatSheets() {
   const { topicId } = useParams();

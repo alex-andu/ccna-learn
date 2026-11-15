@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useStore } from '../lib/store';
 import { api } from '../lib/api';
 import { Icon } from '../components/Icon';
-import attribution from '../../public/img/wiki/attribution.json';
+import { ATTRIBUTION as attribution } from '../lib/attribution';
 
 export function Settings() {
   const { theme, setTheme, settings, saveSettings, online } = useStore();
