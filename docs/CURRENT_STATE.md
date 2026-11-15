@@ -1,49 +1,70 @@
 # CURRENT STATE — întreținut manual
 
-Actualizat: 2026-11-15 · commit `79a7918` · branch `claude/beautiful-dirac-hf431v`.
+Actualizat: 2026-11-15 · commit `79a7918` (+ modificări necomise: 1.7–1.10, 1.12–1.13, 2.1–2.9) · branch `claude/beautiful-dirac-hf431v`.
 **Regulă:** existența unui fișier NU înseamnă conținut complet, validat sau revizuit. Nu deduce starea din număr de fișiere, număr de întrebări sau mesaje de commit. Coloanele sunt independente; `?` = neevaluat; nicio stare nu se „promovează” fără dovezi. Definițiile oficiale și checklistul „Complet tehnic” sunt în `docs/WORKFLOW.md` §6.
 
 ## Legendă (aceleași 5 stări ca în WORKFLOW §6)
 - **Fișiere existente**: ce e în repo (T=Theory, C=Config, L=Labs, S=CheatSheet, i=index.tsx, Q=întrebări, G=termeni, F=facts, D=diagrame). Nu spune nimic despre corectitudine sau completitudine.
 - **Complet tehnic**: toți pașii de validare tehnică aplicabili au fost efectiv rulați și au trecut (checklist WORKFLOW §6). Poate fi declarat de agent, cu dovezi. `check-content neefectuat` ⇒ nu se acordă.
 - **Review didactic**: revizuire umană sau confirmare explicită a utilizatorului. Nu poate fi declarat de agent.
-- **Înregistrat**: importat în `web/src/content/registry.ts` (`TOPICS`; acum doar `T1_11`). Neînregistrat → nu se randează, indiferent de `AVAILABLE`. Se modifică doar cu aprobarea explicită a utilizatorului.
-- **Disponibil**: în `AVAILABLE` (`web/src/data/curriculum.ts`) — apare în aplicație. **Acum: `['1.11']`; nu se schimbă fără aprobare explicită.**
+- **Înregistrat**: importat în `web/src/content/registry.ts` (`TOPICS`; acum `T1_1`–`T1_13`, `T2_1`–`T2_9`). Neînregistrat → nu se randează, indiferent de `AVAILABLE`. Se modifică doar cu aprobarea explicită a utilizatorului.
+- **Disponibil**: în `AVAILABLE` (`web/src/data/curriculum.ts`) — apare în aplicație. **Acum: `1.1`–`1.13`, `2.1`–`2.9`; nu se schimbă fără aprobare explicită.**
 - „Evidențe” = ce verificări s-au văzut efectiv (informativ; nu înlocuiește „Complet tehnic”).
 
 ## Verificări la nivel de repo
 - `npm ci` și `npm run build` (`tsc -b && vite build` pentru web): rulate cu succes de utilizator pe commit `79a7918`, fără erori; data rulării nu a fost înregistrată. Nu acoperă runtime, vizual, conținut.
-- `node scripts/check-content.mjs` (rulat **2026-11-15**, pe commit `79a7918` + working tree doar cu modificări de documentație; printr-o copie cu `root` fixat, scriptul eșuează nativ pe Windows): 387 termeni de glosar, 297 întrebări (1.1:42, 1.2:43, 1.3:43, 1.4:43, 1.5:43, 1.6:43, 1.11:40). **Eșuează**: termeni lipsă (`ipv6`, `gua`, `ula`, `link-local`, `multicast`, `cam`, `frame`, `mac-table`, `aging`, `unknown-unicast`, `fcs`, `store-and-forward`, `cut-through`, `pe-router`) și `InlineQuiz` care referă întrebări inexistente din 1.7 și 1.10 (nu există `questions/t1_7.ts`, `t1_10.ts`).
+- `node scripts/check-content.mjs` (rulat **2026-11-15**, după scrierea 1.13, printr-o copie cu `root` fixat; scriptul eșuează nativ pe Windows): 425 termeni de glosar, 539 întrebări (1.1–1.13), `✓ conținut OK` — fără erori și fără termeni canonici lipsă. `npm run build` complet (rădăcină: web `tsc -b && vite build` + server) rulat cu succes după înregistrarea 1.13.
+- **2026-11-15 (sesiunea 2.1–2.3):** `tsc -b --noEmit` ✔ fără erori; `check-content` (copie temporară cu `root` fixat, în scratchpad) → 442 termeni, 659 întrebări (2.1: 40, 2.2: 40, 2.3: 40), `✓ conținut OK`; `npm run build` complet (rădăcină) ✔ după înregistrarea și adăugarea în `AVAILABLE` a 2.1–2.3 (aprobat de utilizator în chat). Verificare vizuală: **neefectuată**.
+- **2026-11-15 (sesiunea 2.4–2.9):** `tsc -b --noEmit` ✔ fără erori; `check-content` (copie temporară cu `root` fixat, în scratchpad) → 495 termeni, 899 întrebări (2.4–2.9: câte 40), `✓ conținut OK`; script ad-hoc pentru întrebări: id-uri unice, niciun `why` gol. `npm run build` complet (rădăcină: web `tsc -b && vite build` + server) ✔ după înregistrarea în `TOPICS` și adăugarea în `AVAILABLE` a 2.4–2.9 (aprobat de utilizator în chat). Verificare vizuală parțială: `vite` dev + browserul integrat — fiecare pagină `/topic/2.4`…`2.9` se randează (secțiuni + SVG-uri), fără erori JS în consolă (doar 502 de la backend-ul API nepornit); panoul era ascuns (`innerWidth` 0), deci overflow/mobil/interacțiuni **neverificate**.
 - Verificare vizuală: **neefectuată** (stare la 2026-11-15, commit `79a7918`); Playwright nu e instalat în mediul curent.
 
 ## Domeniul 1 — Network Fundamentals
 
 | Topic | Fișiere existente | Complet tehnic | Evidențe (informativ) | Review didactic | Înregistrat | Disponibil |
 |---|---|---|---|---|---|---|
-| 1.1 | T C L S i Q G F D | ? (commit `ad9ae09` zice „complete”; neconfirmat) | build ✔; check-content: termeni lipsă | nu | nu | nu |
-| 1.2 | T C L S i Q G F D | ? (idem) | build ✔; check-content: `pe-router` | nu | nu | nu |
-| 1.3 | T C L S i Q G F D | ? (idem) | build ✔ | nu | nu | nu |
-| 1.4 | T C L S i Q G F D | ? (idem) | build ✔; check-content: `fcs` | nu | nu | nu |
-| 1.5 | T C L S i Q G F D | ? (idem) | build ✔; check-content: `fcs`, `frame`, `ipv6` | nu | nu | nu |
-| 1.6 | T C L S i Q G F D | ? (commit zice „partial”; neevaluat) | build ✔; check-content: `ipv6`, `multicast` | nu | nu | nu |
-| 1.7 | T C G D (fără L, S, i, Q, F) | nu | build ✔; `InlineQuiz` fără întrebări | nu | nu | nu |
-| 1.8 | D | nu | — | nu | nu | nu |
-| 1.9 | D | nu | — | nu | nu | nu |
-| 1.10 | T C L G D (fără S, i, Q, F) | nu | build ✔; `InlineQuiz` fără întrebări | nu | nu | nu |
+| 1.1 | T C L S i Q G F D | ? (tsc ✔, check-content: doar termeni 1.13 lipsă; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: `cam`, `frame`, `mac-table`, `aging`, `unknown-unicast`, `store-and-forward`, `fcs`, `cut-through` (canonici 1.13, nescris) | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.2 | T C L S i Q G F D | ? (tsc ✔, check-content doar termeni canonici viitori; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: doar termeni 1.8/1.9/1.13 lipsă | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.3 | T C L S i Q G F D | ? (tsc ✔, check-content doar termeni canonici viitori; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: doar termeni 1.8/1.9/1.13 lipsă | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.4 | T C L S i Q G F D | ? (tsc ✔, check-content doar termeni canonici viitori; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: doar termeni 1.8/1.9/1.13 lipsă | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.5 | T C L S i Q G F D | ? (tsc ✔, check-content doar termeni canonici viitori; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: doar termeni 1.8/1.9/1.13 lipsă | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.6 | T C L S i Q G F D | ? (tsc ✔, check-content doar termeni canonici viitori; `why` verificat parțial) | tsc ✔ 2026-11-15; check-content: doar termeni 1.8/1.9/1.13 lipsă | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.7 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ doar termeni 1.13 în alte topicuri; 40 întrebări, `why` verificat prin script; fără `[verify]`) | tsc ✔ · check-content ✔ · build într-un director temporar ✔ · RFC 1918, NAT/PAT, CGNAT | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.8 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ doar termeni 1.13 în alte topicuri; 40 întrebări, `why` verificat prin script; fără `[verify]`) | tsc ✔ · check-content ✔ · build într-un director temporar ✔ · IPv6: notație, prefix, subnetting, config | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.9 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ doar termeni 1.13 în alte topicuri; 40 întrebări, `why` verificat prin script; fără `[verify]`) | tsc ✔ · check-content ✔ · build într-un director temporar ✔ · tipuri de adrese IPv6, EUI-64 | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.10 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ doar termeni 1.13 în alte topicuri; 40 întrebări, `why` verificat prin script; fără `[verify]`) | tsc ✔ · check-content ✔ · build într-un director temporar ✔ · parametri IP pe Windows/macOS/Linux | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
 | **1.11** | T C L S i Q G F D (pilot, `rf.tsx` + `wlan.tsx`) | ? (pilot; checklist-ul WORKFLOW §6 nu a fost parcurs formal) | build ✔ | **da** (utilizatorul: „exact ce-mi doresc”) | da | **da** |
-| 1.12 | G D (fără T, C, L, S, i, Q, F) | nu | — | nu | nu | nu |
-| 1.13 | D (fără restul) | nu | — | nu | nu | nu |
+| 1.12 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ doar termeni 1.13 în alte topicuri; 41 întrebări (30 single, 3 multi, 2 match, 2 order, 4 cli), `why` verificat prin script; 21 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet neefectuat · hypervisor, containere, VRF-Lite; laburi VRF doar GNS3/EVE-NG/CML (suport VRF în PT neverificat) | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 1.13 | T C L S i Q G F D | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔ fără erori; 41 întrebări (29 single, 4 multi, 2 match, 2 order, 4 cli), `why` verificat prin script; 20 facts; 17 termeni; fără `[verify]`) | tsc ✔ · check-content ✔ · `npm run build` complet ✔ · MAC learning/aging, flooding, tabela MAC; output-uri CLI ilustrative, neverificate pe echipamente; verificare vizuală neefectuată | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
 
-Observații: coloana „Evidențe” se referă la verificările de mai sus (commit `79a7918`, 2026-11-15; pentru build data nu e înregistrată) — la orice nouă verificare se actualizează data și commit-ul. „build ✔” pentru topicurile neînregistrate înseamnă doar că fișierele trec `tsc -b`, nu că sunt randate. 1.12 și 1.13: există notițe de cercetare, nu și lecții. Pentru 1.1–1.6, „?” rămâne până la parcurgerea checklistului WORKFLOW §6, inclusiv rularea efectivă a `check-content`.
+Observații: 1.13 scris în sesiunea 2026-11-15 pe baza notițelor de cercetare; diagramele `t1_13.tsx` existau deja. Coloana „Evidențe” se referă la verificările de mai sus (commit `79a7918`, 2026-11-15; pentru build data nu e înregistrată) — la orice nouă verificare se actualizează data și commit-ul. „build ✔” pentru topicurile neînregistrate înseamnă doar că fișierele trec `tsc -b`, nu că sunt randate. 1.13: există notițe de cercetare, nu și lecții. Pentru 1.1–1.6, „?” rămâne până la parcurgerea checklistului WORKFLOW §6, inclusiv rularea efectivă a `check-content`.
 
-## Domeniile 2.0–6.0
+## Domeniul 2 — Network Access
+
+| Topic | Fișiere existente | Complet tehnic | Evidențe (informativ) | Review didactic | Înregistrat | Disponibil |
+|---|---|---|---|---|---|---|
+| 2.1 | T C L S i Q G F D (`t2_1.tsx`, `l2kit.tsx`) | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔; 40 întrebări (28 single, 4 multi, 2 match, 2 order, 4 cli), `why` verificat prin script; 7 termeni noi; 19 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · VLAN, access/voice, default VLAN, ROAS, SVI; output-uri CLI ilustrative, neverificate pe echipamente; verificare vizuală neefectuată | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.2 | T C L S i Q G F D (`t2_2.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (28/4/2/2/4); 8 termeni noi; 19 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · trunk, DTP, allowed VLANs, 802.1Q, native VLAN, VLAN hopping; comportamentul implicit DTP/log-urile variază pe platformă (precizat în text) | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.3 | T C L S i Q G F D (`t2_3.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (28/4/2/2/4); 2 termeni noi (`cdp`, `lldp`, `lldp-med` din 1.1 doar referiți); 18 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · CDP/LLDP; timerele LLDP (30/120 s) prezentate ca „uzuale, verifică cu show lldp”; suportul LLDP în Packet Tracer neverificat (notat în lab) | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.4 | T C L S i Q G F D (`t2_4.tsx`) | da (2026-11-15: fișiere complete; tsc ✔; check-content ✔; 40 întrebări (28 single, 4 multi, 2 match, 2 order, 4 cli), `why` verificat prin script; 5 termeni noi; 20 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · LACP/PAgP/on, L2/L3, load balancing, summary; metoda implicită de load-balance variază pe platformă (precizat în text); output-uri ilustrative | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.5 | T C L S i Q G F D (`t2_5.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (28/4/2/2/4); 16 termeni noi; 20 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · root bridge, costuri, roluri/stări RSTP, PortFast, guards; `root primary/secondary` formulat „de obicei 24576/28672”; timpul RSTP „≈1–2 s” | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.6 | T C L S i Q G F D (`t2_6.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (29 single, 3 multi, 2 match, 2 order, 4 cli); 10 termeni noi; 20 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · arhitecturi, CAPWAP/split-MAC, moduri AP; sintaxa WLC (AireOS vs 9800) și suportul în Packet Tracer neverificate | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.7 | T C L S i Q G F D (`t2_7.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (30 single, 3 multi, 2 match, 2 order, 3 cli); 7 termeni noi; 18 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · AP access/trunk, porturi/interfețe WLC, LAG static; LAG static pe AireOS (sursă: articol Cisco Community), pe 9800 de verificat în documentație | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.8 | T C L S i Q G F D (`t2_8.tsx`) | da (2026-11-15: ca mai sus; 40 întrebări (29 single, 3 multi, 2 match, 2 order, 4 cli); 5 termeni noi; 18 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · console/Telnet/SSH/HTTP(S), AAA, TACACS+/RADIUS, cloud; sintaxa `tacacs server` / `radius server` depinde de versiunea IOS (precizat) | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+| 2.9 | T C L S i Q G F D (`t2_9.tsx`, mock GUI interactiv) | da (2026-11-15: ca mai sus; 40 întrebări (31 single, 2 multi, 3 match, 2 order, 2 cli); 10 termeni noi; 20 facts; fără `[verify]`) | tsc ✔ · check-content ✔ · build complet ✔ · taburile General/Security/QoS/Advanced (stil AireOS) + echivalent 9800; comenzile `config wlan …` și opțiunile GUI nu au fost verificate pe un WLC real | nu | da (aprobat de utilizator) | da (aprobat de utilizator) |
+
+Observații 2.1–2.3: topicurile au fost scrise doar pe baza `topic_depth_commands.md` (D2) și a cunoașterii tehnice; **nu există notițe de cercetare dedicate Domeniului 2** (nici `research_notes/` actualizat), deci valorile din afara D2 (de exemplu codurile de capabilitate CDP/LLDP, valorile implicite DTP pe platforme, `%CDP-4-DUPLEX_MISMATCH`) au fost formulate prudent și merită verificate la review. Nu s-au folosit fotografii. `diagrams/l2kit.tsx` este un fișier nou cu utilitare SVG comune (nu un component comun din `components/`). Din 2.1 se referă `pcp` (definit în 2.2).
+
+Observații 2.4–2.9: scrise doar pe baza `topic_depth_commands.md` (D2), a cunoașterii tehnice și a două căutări web țintite (LAG pe WLC AireOS = doar static, `mode on`; LACP până la 16 porturi / 8 active, priorități implicite 32768; load-balance implicit depinde de platformă). **Nu există notițe de cercetare dedicate Domeniului 2.** Neverificat pe echipamente/surse oficiale: sintaxa exactă `config wlan …` (AireOS) și CLI 9800, mesajele de log, valorile DTIM/timeout din exemple, suportul Packet Tracer pentru WLC (laburile 2.6–2.9 au limitele notate). `diagrams/t2_9.tsx` conține un mock de GUI în HTML (variabile CSS, taburi `button` — fără `Term` în interior). Termeni definiți de 2.7 și referiți ulterior: `lag`; din 2.6: `cloud-managed` (reutilizat în 2.8). Fără fotografii.
+
+## Domeniile 3.0–6.0
 Fără conținut. Apar „în curând” în `curriculum.ts`.
 
 ## Următorii pași curenți (sursa pentru starea execuției; motivațiile sunt în `docs/DECISIONS.md`; decide utilizatorul)
-1. Rezolvarea erorilor `check-content` (termeni de la 1.8/1.9/1.12/1.13 neînscriși, `questions` 1.7/1.10) — odată cu scrierea acelor topicuri.
+1. (Rezolvat) `check-content` nu mai are erori după scrierea lui 1.13.
 2. Revizuirea topicurilor 1.1–1.6 de către utilizator → la aprobarea lui, înregistrare în `registry.ts` și, separat, `AVAILABLE`.
-3. Completarea 1.7, 1.10, apoi 1.8, 1.9, 1.12, 1.13 conform `docs/WORKFLOW.md`.
-4. Domeniile 2.0–6.0. Ulterior update v2.0 (vezi `docs/DECISIONS.md`).
+3. 1.7–1.10 au toate fișierele și sunt complet tehnice (neînregistrate, nerevizuite). 1.12 are toate fișierele și e complet tehnic (înregistrat în `TOPICS` cu aprobare; nerevizuit; în `AVAILABLE` cu aprobare). 1.13 e scris, complet tehnic, înregistrat și în `AVAILABLE` (aprobat); revizuirea 1.7–1.10 de către utilizator, apoi înregistrare separată.
+4. Domeniul 2: 2.1–2.9 scrise, complet tehnice, înregistrate și în `AVAILABLE` (aprobat); domeniul 2 este complet ca fișiere. Revizuirea didactică 2.1–2.9 aparține utilizatorului; recomandat: notițe de cercetare pentru D2 (verificarea sintaxei WLC AireOS/9800, LACP/PAgP, RSTP) și o verificare vizuală (desktop + mobil, interacțiunile diagramelor) înainte de review.
+5. Domeniile 3.0–6.0. Ulterior update v2.0 (vezi `docs/DECISIONS.md`).
 
 ## Pointeri
 Procedură: `docs/WORKFLOW.md` · Decizii: `docs/DECISIONS.md` · Cercetare: `research_notes/INDEX.md`.
