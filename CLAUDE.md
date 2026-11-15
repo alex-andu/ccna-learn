@@ -106,4 +106,4 @@ Verificare vizuală: Playwright (preinstalat în mediul cloud) — screenshot de
 
 ## 10. Git
 
-Lucrul curent e pe branch-ul `claude/beautiful-dirac-hf431v` (nu există încă `main` cu cod). Commit-uri mici, mesaje în engleză.
+Branch principal: `main` (conține tot codul). Lucrul nou se face pe un branch de lucru și se integrează în `main`. Commit-uri mici, mesaje în engleză.
