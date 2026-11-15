@@ -2,7 +2,7 @@ import type { GlossaryEntry } from '../lib/types';
 
 // Fiecare termen are 3 straturi: ce face, cum lucrează, unde se folosește.
 // Termenii tehnici rămân în engleză (ca la examen); explicațiile sunt în română.
-export const GLOSSARY: GlossaryEntry[] = [
+const BASE: GlossaryEntry[] = [
   // ---------------- organizații & standarde ----------------
   {
     id: 'ieee', abbr: 'IEEE', full: 'Institute of Electrical and Electronics Engineers', ro: 'organizație de standardizare',
@@ -688,6 +688,11 @@ export const GLOSSARY: GlossaryEntry[] = [
   },
 ];
 
+// Termeni adăugați de fiecare topic nou: data/terms/<tX_Y>.ts exportă `TERMS`.
+// La id duplicat câștigă prima definiție (baza de mai sus, apoi fișierele în ordine alfabetică).
+const extra = import.meta.glob('./terms/*.ts', { eager: true, import: 'TERMS' }) as Record<string, GlossaryEntry[]>;
 const BY_ID = new Map<string, GlossaryEntry>();
-for (const g of GLOSSARY) BY_ID.set(g.id, g);
+for (const g of BASE) if (!BY_ID.has(g.id)) BY_ID.set(g.id, g);
+for (const k of Object.keys(extra).sort()) for (const g of extra[k]) if (!BY_ID.has(g.id)) BY_ID.set(g.id, g);
+export const GLOSSARY: GlossaryEntry[] = [...BY_ID.values()];
 export const glossaryById = (id: string) => BY_ID.get(id);
