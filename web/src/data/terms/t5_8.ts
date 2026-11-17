@@ -1,0 +1,103 @@
+import type { GlossaryEntry } from '../../lib/types';
+
+// Termeni pentru 5.8 (AAA). `aaa`, `radius`, `tacacs-plus` (2.8), `dot1x`, `eap` (1.11), `local-authentication`, `login-local` sunt doar referiți.
+export const TERMS: GlossaryEntry[] = [
+  {
+    id: 'authentication', abbr: 'Authentication', ro: 'autentificare (cine ești?)',
+    what: 'Prima funcție AAA: verifică identitatea unui utilizator sau dispozitiv (de exemplu cu utilizator + parolă, certificat sau MFA).',
+    how: 'Echipamentul (NAS) trimite credențialele către o bază locală sau un server AAA și primește acceptat/refuzat. Nu spune nimic despre ce are voie să facă utilizatorul.',
+    where: 'Login pe console/VTY, 802.1X pe porturi și Wi-Fi, VPN.',
+    topics: ['5.8', '2.8'], aliases: ['AuthN'],
+  },
+  {
+    id: 'authorization', abbr: 'Authorization', ro: 'autorizare (ce ai voie?)',
+    what: 'A doua funcție AAA: stabilește ce resurse și comenzi poate folosi un utilizator deja autentificat.',
+    how: 'Se aplică după autentificare: nivel de privilegiu (0–15), acces la exec, lista de comenzi permise, VLAN sau ACL atribuite. TACACS+ o tratează separat și poate autoriza fiecare comandă; RADIUS o trimite în același răspuns cu autentificarea.',
+    where: 'Administrare echipamente (roluri), acces la rețea (VLAN/ACL per utilizator).',
+    topics: ['5.8'], aliases: ['AuthZ'],
+  },
+  {
+    id: 'accounting', abbr: 'Accounting', ro: 'contabilizare (ce ai făcut?)',
+    what: 'A treia funcție AAA: înregistrează cine s-a conectat, când, cât timp, ce a făcut și, opțional, ce comenzi a dat.',
+    how: 'NAS-ul trimite serverului mesaje START, STOP și, opțional, interim, cu utilizator, durată, volum de trafic sau comenzi. Servește la audit, facturare și investigarea incidentelor.',
+    where: 'Audit al administratorilor, facturarea accesului, conformitate.',
+    topics: ['5.8'],
+  },
+  {
+    id: 'nas', abbr: 'NAS', full: 'Network Access Server', ro: 'dispozitivul care cere verificarea serverului AAA',
+    what: 'Echipamentul de la marginea rețelei (router, switch, AP/WLC, gateway VPN) care primește utilizatorul și întreabă serverul AAA.',
+    how: 'NAS-ul este clientul RADIUS/TACACS+: cunoaște adresa serverului și secretul partajat, trimite cererile și aplică răspunsul.',
+    where: 'Orice dispozitiv care are aaa new-model configurat.',
+    topics: ['5.8'], aliases: ['AAA client'],
+  },
+  {
+    id: 'aaa-new-model', abbr: 'aaa new-model', ro: 'activarea AAA pe IOS',
+    what: 'Comanda globală care pornește modelul AAA pe un echipament Cisco IOS; fără ea nu funcționează listele de metode.',
+    how: 'După activare, liniile folosesc implicit lista „default”; trebuie definite liste de metode (aaa authentication login …). Atenție la lockout: configurează întâi un utilizator local și testează într-o a doua sesiune.',
+    where: 'Prima comandă dintr-o configurare AAA.',
+    topics: ['5.8'],
+  },
+  {
+    id: 'aaa-method-list', abbr: 'Method list', ro: 'lista de metode AAA',
+    what: 'Lista ordonată de surse (de exemplu group tacacs+ local) pe care routerul le încearcă pentru autentificare, autorizare sau contabilizare.',
+    how: 'Lista „default” se aplică automat tuturor liniilor; o listă cu nume se aplică explicit (login authentication NUME). Următoarea metodă este încercată doar dacă precedenta nu răspunde (ERROR), nu dacă răspunde cu refuz (FAIL).',
+    where: 'aaa authentication login, aaa authorization exec, aaa accounting exec.',
+    topics: ['5.8'], aliases: ['method list', 'listă de metode'],
+  },
+  {
+    id: 'aaa-fallback', abbr: 'Fallback local', ro: 'metoda de rezervă',
+    what: 'Ultima metodă dintr-o listă (de obicei local) folosită când serverul AAA este inaccesibil, ca să nu pierzi accesul la echipament.',
+    how: 'Se activează doar la timeout/eroare, nu la refuz. Fără „local” în listă, un server căzut blochează toate autentificările pe acea linie (lockout). Pe consolă se folosește adesea o listă separată, doar local.',
+    where: 'Orice listă de metode a unei linii de administrare.',
+    topics: ['5.8'], aliases: ['fallback'],
+  },
+  {
+    id: 'shared-secret', abbr: 'Shared secret', ro: 'secret partajat (cheia serverului)',
+    what: 'Cheia configurată identic pe NAS și pe serverul AAA, folosită pentru a autentifica mesajele și pentru a ascunde (RADIUS: parola) sau cripta (TACACS+: tot corpul) datele.',
+    how: 'Dacă secretul diferă pe cele două capete, serverul respinge sau nu poate decripta cererile: simptomul este „server nu răspunde”/autentificare eșuată pentru toți. Se configurează cu comanda key.',
+    where: 'radius server …/tacacs server … → key.',
+    topics: ['5.8'],
+  },
+  {
+    id: 'command-authorization', abbr: 'Command authorization', ro: 'autorizarea comenzilor',
+    what: 'Autorizarea fiecărei comenzi introduse de administrator față de serverul AAA (în practică cu TACACS+).',
+    how: 'aaa authorization commands 15 default group tacacs+ local: înainte de execuție, routerul întreabă serverul dacă utilizatorul are voie la acea comandă. Permite roluri precum „operator doar show” și „inginer rețea”.',
+    where: 'Administrarea echipamentelor cu separarea responsabilităților.',
+    topics: ['5.8'],
+  },
+  {
+    id: 'supplicant', abbr: 'Supplicant', ro: 'clientul 802.1X',
+    what: 'Rolul din 802.1X al dispozitivului care cere acces la rețea (laptop, telefon) și furnizează credențialele.',
+    how: 'Rulează un client EAP (inclus în OS sau instalat) care vorbește EAPOL cu authenticator-ul.',
+    where: 'Stații și dispozitive conectate la porturi 802.1X sau la Wi-Fi Enterprise.',
+    topics: ['5.8', '5.9'],
+  },
+  {
+    id: 'authenticator', abbr: 'Authenticator', ro: 'dispozitivul de acces din 802.1X',
+    what: 'Rolul din 802.1X al switch-ului, AP-ului sau WLC-ului care blochează portul până la autentificare și retransmite mesajele EAP către serverul de autentificare.',
+    how: 'Vorbește EAPOL cu supplicant-ul și RADIUS cu serverul. După Access-Accept deschide portul/asociază clientul.',
+    where: 'Porturi de switch, AP/WLC.',
+    topics: ['5.8', '5.9'],
+  },
+  {
+    id: 'authentication-server', abbr: 'Authentication server', ro: 'serverul de autentificare',
+    what: 'Rolul din 802.1X al serverului (de obicei RADIUS, de exemplu Cisco ISE) care validează credențialele și trimite decizia și atributele.',
+    how: 'Primește EAP prin RADIUS de la authenticator, îl verifică în baza de utilizatori sau directoare și răspunde Access-Accept/Reject.',
+    where: 'Rețele cu 802.1X și WPA2/WPA3-Enterprise.',
+    topics: ['5.8', '5.9'],
+  },
+  {
+    id: 'eapol', abbr: 'EAPOL', full: 'EAP over LAN', ro: 'EAP peste LAN',
+    what: 'Încapsularea EAP direct în cadre Layer 2 între supplicant și authenticator, înainte ca portul să primească o adresă IP.',
+    how: 'Ethertype 0x888E; transportă identitatea și mesajele metodei EAP. Între authenticator și server mesajele EAP sunt purtate în pachete RADIUS.',
+    where: 'Segmentul client–switch/AP din 802.1X.',
+    std: 'IEEE 802.1X', layer: 'L2', topics: ['5.8', '5.9'],
+  },
+  {
+    id: 'cisco-ise', abbr: 'Cisco ISE', full: 'Identity Services Engine', ro: 'platforma Cisco de politici de acces',
+    what: 'Server de politici Cisco care joacă rolul de server RADIUS/TACACS+ și aplică politici de acces în funcție de utilizator, dispozitiv și context.',
+    how: 'Primește cereri 802.1X/RADIUS și TACACS+, le validează față de directoare (de exemplu Active Directory) și întoarce decizii cu atribute (VLAN, ACL, grup de securitate).',
+    where: 'Rețele de companie cu control al accesului (NAC).',
+    topics: ['5.8'], aliases: ['ISE'],
+  },
+];

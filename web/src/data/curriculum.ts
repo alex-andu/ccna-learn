@@ -567,7 +567,7 @@ export const CURRICULUM: Domain[] = [
 ];
 
 /** Topic-uri cu conținut complet (restul apar ca „în curând”). */
-export const AVAILABLE = new Set<string>(['1.11']);
+export const AVAILABLE = new Set<string>(['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9', '1.10', '1.11', '1.12', '1.13', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8', '2.9', '3.1', '3.2', '3.3', '3.4', '3.5', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8', '5.9', '5.10', '6.1', '6.2', '6.3', '6.4', '6.5']);
 
 export const allObjectives = () => CURRICULUM.flatMap((d) => d.objectives.map((o) => ({ ...o, domain: d })));
 export const findObjective = (id: string) => allObjectives().find((o) => o.id === id);

@@ -438,7 +438,7 @@ export function StatefulFirewall() {
         <p className="small" style={{ margin: 0 }}><b>{st.from} → {st.to}</b> ({st.flags})</p>
         <p className="small" style={{ margin: '6px 0 10px', color: col }}><b>{st.verdict}:</b> <span style={{ color: 'var(--text-2)' }}>{st.why}</span></p>
         <div className="small"><b>Tabela de stare (state table):</b></div>
-        <div className="mono small" style={{ marginTop: 4, padding: '8px 10px', borderRadius: 8, background: 'var(--code-bg)', border: '1px solid var(--border)' }}>
+        <div className="mono small" style={{ marginTop: 4, padding: '8px 10px', borderRadius: 8, background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
           {st.table.length ? st.table.map((r) => <div key={r}>{r}</div>) : <span className="muted">(goală)</span>}
         </div>
       </div>

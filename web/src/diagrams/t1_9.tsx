@@ -548,7 +548,7 @@ export function ArpVsNs() {
       </div>
       <svg viewBox="0 0 720 270" role="img" aria-label={v6 ? 'NS trimis la grupul solicited-node' : 'ARP trimis ca broadcast'} width="100%">
         <ClientIcon x={60} y={132} kind="pc" label="emițător" />
-        <rect x={110} y={96} width={190} height={74} rx={10} fill="var(--code-bg)" stroke="var(--border-strong)" />
+        <rect x={110} y={96} width={190} height={74} rx={10} fill="var(--surface-2)" stroke="var(--border-strong)" />
         <T x={120} y={116} anchor="start" size={10.5} m color={v6 ? 'var(--warn)' : 'var(--bad)'}>dst MAC {v6 ? '33:33:ff:33:44:55' : 'ff:ff:ff:ff:ff:ff'}</T>
         <T x={120} y={134} anchor="start" size={10.5} m color="var(--text-2)">{v6 ? 'dst IP ff02::1:ff33:4455' : 'ARP: who has 10.0.0.30?'}</T>
         <T x={120} y={152} anchor="start" size={10.5} m color="var(--text-2)">{v6 ? 'ICMPv6 NS: target …:fe33:4455' : '(cadru broadcast)'}</T>

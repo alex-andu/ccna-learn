@@ -1,0 +1,476 @@
+import type { Question } from '../../lib/types';
+
+// Banca de întrebări pentru 1.13 Describe switching concepts (a. MAC learning and aging · b. Frame switching · c. Frame flooding · d. MAC address table).
+// Fiecare variantă are explicație — atât cea corectă, cât și cele greșite.
+const T = '1.13';
+
+export const Q_1_13: Question[] = [
+  // ======================= 1.13.a MAC learning and aging =======================
+  {
+    id: '1.13-001', topicId: T, sub: '1.13.a', type: 'single', difficulty: 1,
+    stem: 'Din ce informație a unui cadru primit învață un switch o adresă MAC nouă?',
+    options: [
+      { id: 'a', text: 'Din adresa MAC sursă, împreună cu portul pe care a intrat cadrul', correct: true, why: 'Sursa spune cine a trimis cadrul; portul de intrare spune unde se află acea stație față de switch.' },
+      { id: 'b', text: 'Din adresa MAC destinație', correct: false, why: 'Destinația arată încotro merge cadrul, nu unde se află cineva; ea se folosește doar la decizia de forwarding.' },
+      { id: 'c', text: 'Din adresa IP sursă', correct: false, why: 'Switch-ul de nivel 2 nu citește antetul IP pentru a construi tabela MAC.' },
+      { id: 'd', text: 'Din EtherType', correct: false, why: 'EtherType spune ce protocol e în payload; nu conține nicio adresă.' },
+    ],
+    explanation: 'Learning = sursă + port de intrare. Forwarding = destinație.',
+  },
+  {
+    id: '1.13-002', topicId: T, sub: '1.13.a', type: 'single', difficulty: 1,
+    stem: 'Care este valoarea implicită a aging time-ului pentru intrările dinamice din tabela MAC pe un switch Cisco?',
+    options: [
+      { id: 'a', text: '300 de secunde', correct: true, why: 'Cinci minute este valoarea implicită Cisco, vizibilă în show mac address-table aging-time.' },
+      { id: 'b', text: '30 de secunde', correct: false, why: 'Prea scurt; 30 s apare doar ca valoare de demonstrație în laburi.' },
+      { id: 'c', text: '3600 de secunde', correct: false, why: 'O oră nu este valoarea implicită Cisco.' },
+      { id: 'd', text: 'Intrările nu expiră niciodată', correct: false, why: 'Doar intrările statice nu expiră; cele dinamice expiră.' },
+    ],
+    explanation: 'Default Cisco = 300 s (5 minute).',
+  },
+  {
+    id: '1.13-003', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'Ce resetează timerul de aging al unei intrări dinamice?',
+    options: [
+      { id: 'a', text: 'Primirea unui nou cadru având acel MAC ca sursă', correct: true, why: 'Fiecare cadru văzut de la stație dovedește că ea încă e acolo, deci timerul reîncepe.' },
+      { id: 'b', text: 'Primirea unui cadru adresat acelui MAC', correct: false, why: 'Cadrele către stație nu reîmprospătează intrarea; contează doar când stația vorbește (sursă).' },
+      { id: 'c', text: 'Un ping trimis de la switch către stație', correct: false, why: 'Un switch de nivel 2 nu verifică stațiile; timerul se resetează doar pe baza traficului sursă.' },
+      { id: 'd', text: 'Trecerea unui interval de 60 de secunde', correct: false, why: 'Trecerea timpului duce spre expirare, nu resetează timerul.' },
+    ],
+    explanation: 'Timerul se resetează la fiecare cadru primit de la acel MAC, ca sursă.',
+  },
+  {
+    id: '1.13-004', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'De ce există mecanismul de aging?',
+    options: [
+      { id: 'a', text: 'Elimină stațiile oprite sau mutate și eliberează spațiul limitat din tabelă', correct: true, why: 'Fără aging, intrări vechi ar rămâne și ar trimite cadre către porturi greșite, iar tabela s-ar umple.' },
+      { id: 'b', text: 'Previne coliziunile pe segmentele half-duplex', correct: false, why: 'Coliziunile se tratează cu CSMA/CD și full-duplex, nu cu aging.' },
+      { id: 'c', text: 'Verifică FCS-ul cadrelor mai vechi', correct: false, why: 'Aging-ul nu are legătură cu verificarea cadrelor.' },
+      { id: 'd', text: 'Reduce numărul de VLAN-uri active', correct: false, why: 'VLAN-urile se configurează manual; aging-ul se referă doar la intrările MAC.' },
+    ],
+    explanation: 'Aging = curățenie: stațiile mutate/oprite dispar, memoria CAM se eliberează.',
+  },
+  {
+    id: '1.13-005', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'Un PC cu MAC-ul 00bb.bbbb.bbbb este mutat din Fa0/2 în Fa0/5 și trimite un cadru. Ce face switch-ul?',
+    options: [
+      { id: 'a', text: 'Actualizează intrarea existentă: MAC-ul apare acum pe Fa0/5 (MAC move)', correct: true, why: 'Un MAC nou văzut pe alt port din același VLAN este considerat mutat, iar intrarea se rescrie.' },
+      { id: 'b', text: 'Păstrează ambele intrări, Fa0/2 și Fa0/5', correct: false, why: 'În același VLAN, un MAC dinamic are o singură intrare.' },
+      { id: 'c', text: 'Aruncă cadrul, pentru că MAC-ul e deja pe alt port', correct: false, why: 'Fără port security, switch-ul acceptă mutarea; blocarea ține de securitate, nu de comutare.' },
+      { id: 'd', text: 'Așteaptă expirarea intrării vechi înainte să învețe portul nou', correct: false, why: 'Intrarea se actualizează imediat, nu trebuie să expire întâi.' },
+    ],
+    explanation: 'MAC move: intrarea își schimbă portul. Mutările repetate = flapping, semn de buclă.',
+  },
+  {
+    id: '1.13-006', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'De ce nu apare niciodată ffff.ffff.ffff ca intrare dinamică în tabela MAC?',
+    options: [
+      { id: 'a', text: 'Pentru că ar putea fi doar adresă destinație; o adresă sursă este mereu unicast, iar switch-ul învață doar din sursă', correct: true, why: 'Nicio placă nu are broadcast ca adresă proprie, deci broadcast-ul nu apare în câmpul sursă.' },
+      { id: 'b', text: 'Pentru că switch-ul ignoră toate cadrele broadcast', correct: false, why: 'Le procesează și le inundă; doar nu le învață ca sursă.' },
+      { id: 'c', text: 'Pentru că tabela MAC acceptă doar adrese statice', correct: false, why: 'Tabela conține majoritar intrări dinamice.' },
+      { id: 'd', text: 'Pentru că ffff.ffff.ffff este rezervată doar pentru IPv6', correct: false, why: 'Este broadcast-ul Ethernet, folosit în IPv4 (ARP, DHCP) și nu e legat de IPv6.' },
+    ],
+    explanation: 'Sursa e mereu unicast (I/G = 0), deci broadcast și multicast nu se învață.',
+  },
+  {
+    id: '1.13-007', topicId: T, sub: '1.13.a', type: 'multi', difficulty: 2,
+    stem: 'Care DOUĂ afirmații despre învățarea dinamică a adreselor MAC sunt corecte?',
+    options: [
+      { id: 'a', text: 'Se face automat, la fiecare cadru primit, fără configurare', correct: true, why: 'Este comportamentul implicit al oricărui switch.' },
+      { id: 'b', text: 'Intrarea conține cel puțin MAC-ul, VLAN-ul și portul de intrare', correct: true, why: 'Tabela e indexată după (VLAN, MAC); portul spune unde se află stația.' },
+      { id: 'c', text: 'Switch-ul învață adresa destinație din cadrele pe care le inundă', correct: false, why: 'Destinația nu se învață; stația respectivă va fi învățată abia când ea însăși trimite un cadru.' },
+      { id: 'd', text: 'Administratorul trebuie să introducă manual fiecare MAC', correct: false, why: 'Intrările manuale sunt statice și opționale.' },
+    ],
+    explanation: 'Learning e automat și bazat pe sursă; intrarea = VLAN + MAC + port.',
+  },
+  {
+    id: '1.13-008', topicId: T, sub: '1.13.a', type: 'single', difficulty: 3,
+    stem: 'Pe Fa0/1 este conectat un switch din spate cu 30 de stații. Ce vei vedea în tabela MAC a switch-ului principal?',
+    options: [
+      { id: 'a', text: 'Toate cele 30 de MAC-uri asociate aceluiași port, Fa0/1', correct: true, why: 'Toate cadrele lor intră pe Fa0/1, deci toate sunt învățate pe acel port.' },
+      { id: 'b', text: 'Un singur MAC, al switch-ului din spate', correct: false, why: 'Switch-ul din spate nu rescrie adresa sursă; MAC-urile stațiilor rămân cele originale.' },
+      { id: 'c', text: 'Nimic, pentru că switch-urile nu învață de la alte switch-uri', correct: false, why: 'Un port de uplink este învățat ca orice alt port.' },
+      { id: 'd', text: 'Câte un port nou pentru fiecare stație', correct: false, why: 'Portul fizic rămâne unul; nu apar porturi virtuale.' },
+    ],
+    explanation: 'Mai multe MAC-uri pe un port ⇒ în spatele lui e alt switch, un hub sau un AP.',
+  },
+  {
+    id: '1.13-009', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'Ce MAC este unicast și administrat universal (adresă „arsă” de producător)?',
+    options: [
+      { id: 'a', text: '0000.0c12.3456', correct: true, why: 'Primul octet 00 în binar e 00000000: I/G = 0 (unicast) și U/L = 0 (universal); OUI 00-00-0C = Cisco.' },
+      { id: 'b', text: '0200.0c12.3456', correct: false, why: 'Primul octet 02 are U/L = 1, adică administrat local.' },
+      { id: 'c', text: '0100.5e00.00fb', correct: false, why: 'Primul octet 01 are I/G = 1: este multicast.' },
+      { id: 'd', text: 'ffff.ffff.ffff', correct: false, why: 'Broadcast: I/G = 1.' },
+    ],
+    explanation: 'Verifică primul octet: bitul I/G (ultimul) și bitul U/L (penultimul).',
+  },
+  {
+    id: '1.13-010', topicId: T, sub: '1.13.a', type: 'match', difficulty: 2,
+    stem: 'Potrivește fiecare adresă MAC cu tipul ei.',
+    leftLabel: 'Adresă', rightLabel: 'Tip',
+    pairs: [
+      { left: 'ffff.ffff.ffff', right: 'broadcast', why: 'Toți biții sunt 1.' },
+      { left: '0100.5e00.00fb', right: 'multicast IPv4', why: 'Prefixul 0100.5e este rezervat multicastului IPv4; I/G = 1.' },
+      { left: '3333.0000.0001', right: 'multicast IPv6', why: 'Prefixul 3333 este folosit pentru multicast IPv6.' },
+      { left: '0200.1111.2222', right: 'unicast administrat local', why: 'Primul octet 02: I/G = 0, U/L = 1.' },
+    ],
+    distractors: [{ text: 'unicast cu OUI Cisco', why: 'Niciuna dintre adrese nu începe cu OUI-ul Cisco 00-00-0C.' }],
+    explanation: 'Citește primul octet în binar: I/G = ultimul bit, U/L = penultimul.',
+  },
+  {
+    id: '1.13-011', topicId: T, sub: '1.13.a', type: 'single', difficulty: 2,
+    stem: 'Ce reprezintă primii 24 de biți (primele 3 octeți) ai unei adrese MAC universale?',
+    options: [
+      { id: 'a', text: 'OUI — identifică producătorul interfeței', correct: true, why: 'Atribuit de IEEE; restul de 24 de biți îi alege producătorul.' },
+      { id: 'b', text: 'Numărul VLAN', correct: false, why: 'MAC-ul nu conține VLAN; acesta e în tag-ul 802.1Q, separat.' },
+      { id: 'c', text: 'Numărul portului switch-ului', correct: false, why: 'Portul nu face parte din adresă; se află în tabela MAC.' },
+      { id: 'd', text: 'Adresa IP codificată', correct: false, why: 'MAC și IP sunt adrese independente; legătura o face ARP.' },
+    ],
+    explanation: 'OUI (24 b) + parte specifică interfeței (24 b) = 48 b.',
+  },
+  // ======================= 1.13.b Frame switching =======================
+  {
+    id: '1.13-012', topicId: T, sub: '1.13.b', type: 'single', difficulty: 1,
+    stem: 'Un switch primește un cadru a cărui destinație MAC este în tabelă, pe un alt port decât cel de intrare. Ce face?',
+    options: [
+      { id: 'a', text: 'Îl trimite (forward) doar pe acel port', correct: true, why: 'Este known unicast: o singură ieșire, fără a deranja restul stațiilor.' },
+      { id: 'b', text: 'Îl inundă pe toate porturile', correct: false, why: 'Inundarea e pentru destinații necunoscute, broadcast și multicast.' },
+      { id: 'c', text: 'Îl aruncă (filter)', correct: false, why: 'Filter se aplică doar când destinația e pe același port de unde a venit cadrul.' },
+      { id: 'd', text: 'Îl trimite la router', correct: false, why: 'Switch-ul nu trimite cadrele spre router decât dacă routerul e chiar destinația.' },
+    ],
+    explanation: 'Known unicast ⇒ forward pe un singur port.',
+  },
+  {
+    id: '1.13-013', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'În ce situație un switch FILTREAZĂ (aruncă) un cadru?',
+    options: [
+      { id: 'a', text: 'Destinația este în tabelă pe același port pe care a intrat cadrul', correct: true, why: 'Destinația a primit deja cadrul prin segmentul comun (de exemplu un hub), deci a-l trimite înapoi ar fi inutil.' },
+      { id: 'b', text: 'Destinația este broadcast', correct: false, why: 'Broadcast-ul se inundă.' },
+      { id: 'c', text: 'Destinația nu e în tabelă', correct: false, why: 'Destinația necunoscută duce la flooding.' },
+      { id: 'd', text: 'MAC-ul sursă nu e în tabelă', correct: false, why: 'Sursa necunoscută e pur și simplu învățată.' },
+    ],
+    explanation: 'Filter = destinația e în aceeași „direcție” cu sursa (același port).',
+  },
+  {
+    id: '1.13-014', topicId: T, sub: '1.13.b', type: 'order', difficulty: 2,
+    stem: 'Ordonează pașii prin care un switch procesează un cadru primit.',
+    items: [
+      { text: 'Primește cadrul pe un port și citește MAC-ul sursă', why: 'Fără sursă nu are ce învăța.' },
+      { text: 'Învață/reîmprospătează intrarea (VLAN, MAC sursă, port)', why: 'Learning se face înaintea deciziei.' },
+      { text: 'Caută MAC-ul destinație în tabelă', why: 'Destinația decide încotro merge cadrul.' },
+      { text: 'Decide: forward, filter sau flood', why: 'Rezultatul căutării determină acțiunea.' },
+      { text: 'Trimite cadrul pe portul/porturile alese', why: 'Ultimul pas: transmiterea.' },
+    ],
+    explanation: 'Learn (sursă) → lookup (destinație) → forward/filter/flood.',
+  },
+  {
+    id: '1.13-015', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'Ce metodă de comutare verifică FCS-ul ÎNAINTE de a începe să trimită cadrul?',
+    options: [
+      { id: 'a', text: 'Store-and-forward', correct: true, why: 'Primește tot cadrul, calculează CRC-ul și abia apoi îl trimite; cadrele corupte sunt aruncate.' },
+      { id: 'b', text: 'Cut-through', correct: false, why: 'Începe după MAC-ul destinație; FCS-ul e la sfârșit, deci nu poate fi verificat înainte.' },
+      { id: 'c', text: 'Fragment-free', correct: false, why: 'Așteaptă doar primii 64 de octeți și nu verifică FCS-ul.' },
+      { id: 'd', text: 'Toate trei verifică FCS-ul identic', correct: false, why: 'Diferența dintre ele este tocmai momentul (și dacă) FCS-ul este verificat.' },
+    ],
+    explanation: 'Doar store-and-forward verifică FCS înainte de forward.',
+  },
+  {
+    id: '1.13-016', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'Care metodă are latența cea mai mică, dar poate propaga cadre corupte?',
+    options: [
+      { id: 'a', text: 'Cut-through', correct: true, why: 'Începe să trimită după primii 6 octeți (MAC destinație), fără să aștepte FCS-ul.' },
+      { id: 'b', text: 'Store-and-forward', correct: false, why: 'Latența ei crește cu mărimea cadrului, dar nu propagă cadre corupte.' },
+      { id: 'c', text: 'Fragment-free', correct: false, why: 'Așteaptă 64 de octeți; latența e mai mare decât la cut-through.' },
+      { id: 'd', text: 'Static forwarding', correct: false, why: 'Nu este o metodă de comutare.' },
+    ],
+    explanation: 'Cut-through: viteză maximă, fără verificare FCS înainte de transmisie.',
+  },
+  {
+    id: '1.13-017', topicId: T, sub: '1.13.b', type: 'match', difficulty: 2,
+    stem: 'Potrivește metoda de comutare cu momentul în care începe transmiterea cadrului.',
+    leftLabel: 'Metodă', rightLabel: 'Începe forwardarea…',
+    pairs: [
+      { left: 'Store-and-forward', right: 'după primirea întregului cadru și verificarea FCS', why: 'Singura care verifică FCS-ul înainte.' },
+      { left: 'Cut-through', right: 'după citirea MAC-ului destinație (primii 6 octeți)', why: 'Latență minimă.' },
+      { left: 'Fragment-free', right: 'după primii 64 de octeți', why: 'Filtrează fragmentele de coliziune (runts).' },
+    ],
+    distractors: [{ text: 'după expirarea timerului de aging', why: 'Aging-ul ține de tabela MAC, nu de momentul transmisiei.' }],
+    explanation: 'Trei metode, trei momente: tot cadrul / 6 octeți / 64 octeți.',
+  },
+  {
+    id: '1.13-018', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'Care este dimensiunea minimă a unui cadru Ethernet (de la Destination MAC până la FCS)?',
+    options: [
+      { id: 'a', text: '64 de octeți', correct: true, why: 'Minimul de 64 B vine din timpul de slot al coliziunilor; payload-ul e completat cu padding până la 46 B.' },
+      { id: 'b', text: '46 de octeți', correct: false, why: '46 B este payload-ul minim, nu cadrul întreg.' },
+      { id: 'c', text: '32 de octeți', correct: false, why: 'Nu este o valoare Ethernet.' },
+      { id: 'd', text: '128 de octeți', correct: false, why: 'Cadrul poate fi mai mic; 128 B nu este un minim.' },
+    ],
+    explanation: '64 B minim (runt dacă e mai mic); 1518 B maxim, 1522 B cu tag 802.1Q.',
+  },
+  {
+    id: '1.13-019', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'Ce conține câmpul FCS al unui cadru Ethernet?',
+    options: [
+      { id: 'a', text: 'Un CRC-32 pentru detectarea erorilor din cadru', correct: true, why: 'Receptorul recalculează CRC-ul și aruncă cadrul dacă nu se potrivește.' },
+      { id: 'b', text: 'Adresa IP a destinației', correct: false, why: 'Adresele IP sunt în pachetul din payload.' },
+      { id: 'c', text: 'Numărul VLAN', correct: false, why: 'VLAN-ul e în tag-ul 802.1Q.' },
+      { id: 'd', text: 'Datele necesare retransmisiei', correct: false, why: 'Ethernet nu retransmite; FCS doar detectează erori.' },
+    ],
+    explanation: 'FCS = CRC-32; detectează, nu corectează.',
+  },
+  {
+    id: '1.13-020', topicId: T, sub: '1.13.b', type: 'multi', difficulty: 3,
+    stem: 'Care DOUĂ câmpuri ale cadrului sunt folosite de switch pentru learning și, respectiv, forwarding?',
+    options: [
+      { id: 'a', text: 'Source MAC — pentru learning', correct: true, why: 'Din sursă învață unde se află stația.' },
+      { id: 'b', text: 'Destination MAC — pentru forwarding', correct: true, why: 'Destinația este căutată în tabelă pentru a alege ieșirea.' },
+      { id: 'c', text: 'EtherType — pentru learning', correct: false, why: 'EtherType nu conține adrese.' },
+      { id: 'd', text: 'FCS — pentru forwarding', correct: false, why: 'FCS verifică integritatea, nu alege portul.' },
+    ],
+    explanation: 'Sursa → learning; destinația → forwarding.',
+  },
+  {
+    id: '1.13-021', topicId: T, sub: '1.13.b', type: 'single', difficulty: 3,
+    stem: 'Un cadru Ethernet II conține EtherType = 0x0806. Ce transportă?',
+    options: [
+      { id: 'a', text: 'Un mesaj ARP', correct: true, why: '0x0806 identifică ARP; 0x0800 ar fi IPv4, 0x86DD IPv6.' },
+      { id: 'b', text: 'Un pachet IPv4', correct: false, why: 'IPv4 are EtherType 0x0800.' },
+      { id: 'c', text: 'Un pachet IPv6', correct: false, why: 'IPv6 are EtherType 0x86DD.' },
+      { id: 'd', text: 'Un tag 802.1Q', correct: false, why: 'Tag-ul 802.1Q folosește TPID 0x8100.' },
+    ],
+    explanation: '0x0800 IPv4 · 0x0806 ARP · 0x86DD IPv6 · 0x8100 802.1Q.',
+  },
+  {
+    id: '1.13-022', topicId: T, sub: '1.13.b', type: 'single', difficulty: 2,
+    stem: 'Câte domenii de coliziune și câte domenii de broadcast creează un switch cu 24 de porturi, toate în VLAN 1, fiecare port full-duplex?',
+    options: [
+      { id: 'a', text: 'Câte un domeniu de coliziune per port (practic fără coliziuni) și un singur domeniu de broadcast', correct: true, why: 'Switch-ul izolează porturile, dar VLAN-ul rămâne un singur domeniu de broadcast.' },
+      { id: 'b', text: 'Un singur domeniu de coliziune și 24 de domenii de broadcast', correct: false, why: 'Situația este exact invers.' },
+      { id: 'c', text: '24 de domenii de coliziune și 24 de domenii de broadcast', correct: false, why: 'Domeniile de broadcast se separă cu VLAN-uri sau routere.' },
+      { id: 'd', text: 'Un singur domeniu pentru ambele', correct: false, why: 'Asta ar fi un hub, nu un switch.' },
+    ],
+    explanation: 'Switch: o coliziune per port; broadcast = VLAN.',
+  },
+  // ======================= 1.13.c Frame flooding =======================
+  {
+    id: '1.13-023', topicId: T, sub: '1.13.c', type: 'single', difficulty: 1,
+    stem: 'Ce face un switch cu un cadru unicast a cărui destinație MAC nu este în tabelă?',
+    options: [
+      { id: 'a', text: 'Îl inundă pe toate porturile VLAN-ului, mai puțin cel de intrare', correct: true, why: 'Nu știe unde e destinația, deci încearcă peste tot unde ar putea fi.' },
+      { id: 'b', text: 'Îl aruncă', correct: false, why: 'Aruncă un router un pachet fără rută; switch-ul nu aruncă unknown unicast.' },
+      { id: 'c', text: 'Îl trimite doar pe primul port liber', correct: false, why: 'Nu există o astfel de regulă.' },
+      { id: 'd', text: 'Cere destinației să se anunțe prin ARP', correct: false, why: 'ARP este făcut de stații, nu de switch.' },
+    ],
+    explanation: 'Unknown unicast ⇒ flood.',
+  },
+  {
+    id: '1.13-024', topicId: T, sub: '1.13.c', type: 'multi', difficulty: 2,
+    stem: 'Care DOUĂ tipuri de cadre sunt inundate (fără IGMP snooping)?',
+    options: [
+      { id: 'a', text: 'Broadcast', correct: true, why: 'ffff.ffff.ffff e destinat tuturor stațiilor din VLAN.' },
+      { id: 'b', text: 'Unknown unicast', correct: true, why: 'Destinația nu e în tabelă.' },
+      { id: 'c', text: 'Known unicast', correct: false, why: 'Se trimite doar pe portul destinației.' },
+      { id: 'd', text: 'Cadrele cu FCS corect', correct: false, why: 'Corectitudinea FCS nu decide inundarea.' },
+    ],
+    explanation: 'Broadcast, unknown unicast și (fără snooping) multicast sunt inundate.',
+  },
+  {
+    id: '1.13-025', topicId: T, sub: '1.13.c', type: 'single', difficulty: 2,
+    stem: 'Pe ce porturi este inundat un cadru primit pe Fa0/1 în VLAN 10?',
+    options: [
+      { id: 'a', text: 'Pe toate porturile VLAN 10 (inclusiv trunk-urile care îl transportă), cu excepția Fa0/1', correct: true, why: 'Flooding e limitat la VLAN-ul cadrului și nu se întoarce pe portul de intrare.' },
+      { id: 'b', text: 'Pe toate porturile switch-ului, inclusiv Fa0/1', correct: false, why: 'Portul de intrare e exclus și porturile din alte VLAN-uri nu primesc cadrul.' },
+      { id: 'c', text: 'Doar pe porturile trunk', correct: false, why: 'Porturile de acces din VLAN 10 îl primesc și ele.' },
+      { id: 'd', text: 'Pe toate porturile din toate VLAN-urile', correct: false, why: 'VLAN-urile izolează domeniile de broadcast.' },
+    ],
+    explanation: 'Flood = tot VLAN-ul, mai puțin portul de intrare.',
+  },
+  {
+    id: '1.13-026', topicId: T, sub: '1.13.c', type: 'single', difficulty: 2,
+    stem: 'PC-A pornește și trimite un ARP request pentru gateway. Ce tip de cadru este și cum îl tratează switch-ul?',
+    options: [
+      { id: 'a', text: 'Broadcast (ffff.ffff.ffff) — inundat în VLAN', correct: true, why: 'ARP request nu cunoaște MAC-ul destinație, deci folosește broadcast.' },
+      { id: 'b', text: 'Known unicast — trimis pe un singur port', correct: false, why: 'Nu are un MAC destinație unicast.' },
+      { id: 'c', text: 'Multicast IPv6 — blocat', correct: false, why: 'ARP este IPv4 și nu e blocat.' },
+      { id: 'd', text: 'Unicast către switch', correct: false, why: 'ARP nu este adresat switch-ului.' },
+    ],
+    explanation: 'ARP request = broadcast ⇒ flood. Răspunsul ARP e unicast.',
+  },
+  {
+    id: '1.13-027', topicId: T, sub: '1.13.c', type: 'single', difficulty: 2,
+    stem: 'De ce este mai puțin probabil ca al doilea cadru către aceeași stație să fie inundat?',
+    options: [
+      { id: 'a', text: 'Răspunsul stației a fost primit, iar sursa lui a fost învățată în tabelă', correct: true, why: 'După răspuns, MAC-ul destinație devine known unicast.' },
+      { id: 'b', text: 'Switch-ul trimite o interogare dedicată către stație', correct: false, why: 'Switch-ul nu interoghează stațiile.' },
+      { id: 'c', text: 'Primul cadru modifică tabela ARP a switch-ului', correct: false, why: 'Switch-ul de nivel 2 nu are tabelă ARP pentru comutare.' },
+      { id: 'd', text: 'Aging time se resetează la 0', correct: false, why: 'Aging-ul nu apare în acest mecanism.' },
+    ],
+    explanation: 'Flood o dată, învață din răspuns, apoi unicast direct.',
+  },
+  {
+    id: '1.13-028', topicId: T, sub: '1.13.c', type: 'single', difficulty: 3,
+    stem: 'Ce efect are IGMP snooping asupra unui cadru multicast IPv4?',
+    options: [
+      { id: 'a', text: 'Îl trimite doar pe porturile unde au fost detectați receptori pentru grup (și spre routerul multicast)', correct: true, why: 'Switch-ul ascultă mesajele IGMP Join și construiește o listă de porturi per grup.' },
+      { id: 'b', text: 'Îl transformă în unicast', correct: false, why: 'Adresa destinație rămâne multicast; doar lista porturilor de ieșire se reduce.' },
+      { id: 'c', text: 'Îl aruncă dacă nu există router', correct: false, why: 'Multicast-ul local continuă să circule între stațiile abonate.' },
+      { id: 'd', text: 'Îl trimite pe toate porturile din toate VLAN-urile', correct: false, why: 'Rămâne în VLAN și nu crește numărul de porturi.' },
+    ],
+    explanation: 'Fără snooping, multicast = ca broadcast; cu snooping, doar porturile interesate.',
+  },
+  {
+    id: '1.13-029', topicId: T, sub: '1.13.c', type: 'single', difficulty: 3,
+    stem: 'Într-o rețea cu o buclă de nivel 2 și fără STP, ce se întâmplă după un singur broadcast?',
+    options: [
+      { id: 'a', text: 'Cadrul circulă la nesfârșit între switch-uri (broadcast storm), pentru că Ethernet nu are TTL', correct: true, why: 'Fiecare switch inundă cadrul pe toate căile, inclusiv înapoi pe cealaltă parte a buclei.' },
+      { id: 'b', text: 'Cadrul expiră după 255 de salturi', correct: false, why: 'Ethernet nu are câmp TTL; TTL este în IP.' },
+      { id: 'c', text: 'Switch-urile blochează automat cadrul după prima inundare', correct: false, why: 'Fără STP nu există un astfel de mecanism.' },
+      { id: 'd', text: 'Se șterge tabela MAC și rețeaua se repornește', correct: false, why: 'Tabela MAC nu se șterge; dimpotrivă, intrările se mută repetat (flapping).' },
+    ],
+    explanation: 'Flooding + buclă + fără TTL = broadcast storm; soluția e STP.',
+  },
+  {
+    id: '1.13-030', topicId: T, sub: '1.13.c', type: 'single', difficulty: 3,
+    stem: 'Un atacator trimite mii de cadre cu adrese sursă false până când tabela MAC se umple. Ce efect are asta?',
+    options: [
+      { id: 'a', text: 'Destinațiile fără intrare sunt inundate, deci atacatorul poate vedea trafic care nu îi era destinat', correct: true, why: 'Cu tabela plină, switch-ul nu mai poate învăța stații noi, deci mult trafic devine unknown unicast.' },
+      { id: 'b', text: 'Switch-ul se oprește și nu mai comută nimic', correct: false, why: 'Continuă să comute, doar că prin flooding.' },
+      { id: 'c', text: 'Se mărește automat memoria CAM', correct: false, why: 'Memoria CAM are dimensiune fixă.' },
+      { id: 'd', text: 'Toate intrările devin statice', correct: false, why: 'Intrările dinamice rămân dinamice și expiră.' },
+    ],
+    explanation: 'MAC flooding atac: tabelă plină ⇒ flood. Apărare: port security (Domeniul 5).',
+  },
+  {
+    id: '1.13-031', topicId: T, sub: '1.13.c', type: 'order', difficulty: 3,
+    stem: 'Ordonează evenimentele pentru primul cadru A → B când tabela MAC e goală și B răspunde.',
+    items: [
+      { text: 'A trimite cadrul către B; switch-ul învață A pe portul lui', why: 'Sursa A este învățată imediat.' },
+      { text: 'B nu e în tabelă, deci cadrul este inundat pe celelalte porturi', why: 'Unknown unicast.' },
+      { text: 'B primește cadrul; celelalte stații îl ignoră', why: 'Doar destinatarul îl procesează.' },
+      { text: 'B răspunde lui A; switch-ul învață B', why: 'Sursa din răspuns este B.' },
+      { text: 'Cadrele A ↔ B ulterioare merg direct, pe un singur port', why: 'Ambele sunt acum în tabelă.' },
+    ],
+    explanation: 'Learn A → flood → B răspunde → learn B → unicast direct.',
+  },
+  // ======================= 1.13.d MAC address table =======================
+  {
+    id: '1.13-032', topicId: T, sub: '1.13.d', type: 'cli', difficulty: 1,
+    stem: 'Afișează toată tabela de adrese MAC a switch-ului.',
+    prompt: 'SW1#', canonical: 'show mac address-table',
+    answers: ['show mac address-table', 'sh mac address-table', 'show mac-address-table', 'sh mac-address-table'],
+    hint: 'show mac ...',
+    wrong: [
+      { text: 'show mac', why: 'Comanda e incompletă; trebuie specificat address-table.' },
+      { text: 'show arp', why: 'Afișează corespondența IP-MAC, nu tabela de comutare.' },
+      { text: 'show interfaces mac', why: 'Nu este o comandă validă pentru tabela MAC.' },
+    ],
+    explanation: 'show mac address-table (IOS vechi: show mac-address-table).',
+  },
+  {
+    id: '1.13-033', topicId: T, sub: '1.13.d', type: 'cli', difficulty: 2,
+    stem: 'Șterge toate intrările DINAMICE din tabela MAC.',
+    prompt: 'SW1#', canonical: 'clear mac address-table dynamic',
+    answers: ['clear mac address-table dynamic', 'clear mac-address-table dynamic'],
+    hint: 'clear mac address-table ...',
+    wrong: [
+      { text: 'clear mac address-table', why: 'Fără cuvântul dynamic comanda nu e completă pe IOS clasic.' },
+      { text: 'no mac address-table', why: 'Nu este o comandă validă de ștergere a intrărilor.' },
+      { text: 'delete mac address-table', why: 'delete lucrează cu fișiere, nu cu tabela MAC.' },
+    ],
+    explanation: 'clear mac address-table dynamic; intrările statice rămân.',
+  },
+  {
+    id: '1.13-034', topicId: T, sub: '1.13.d', type: 'cli', difficulty: 2,
+    stem: 'În modul de configurare globală, setează aging time-ul la 600 de secunde.',
+    prompt: 'SW1(config)#', canonical: 'mac address-table aging-time 600',
+    answers: ['mac address-table aging-time 600', 'mac-address-table aging-time 600'],
+    hint: 'mac address-table aging-time <secunde>',
+    wrong: [
+      { text: 'mac address-table aging 600', why: 'Cuvântul cheie corect este aging-time.' },
+      { text: 'aging-time 600', why: 'Comanda trebuie precedată de mac address-table.' },
+      { text: 'mac address-table timeout 600', why: 'Nu există cuvântul cheie timeout pentru această funcție.' },
+    ],
+    explanation: 'mac address-table aging-time <s>; implicit 300.',
+  },
+  {
+    id: '1.13-035', topicId: T, sub: '1.13.d', type: 'cli', difficulty: 3,
+    stem: 'Creează o intrare statică: MAC 0011.2233.4455 în VLAN 10, pe GigabitEthernet0/1.',
+    prompt: 'SW1(config)#', canonical: 'mac address-table static 0011.2233.4455 vlan 10 interface GigabitEthernet0/1',
+    answers: ['mac address-table static 0011.2233.4455 vlan 10 interface GigabitEthernet0/1', 'mac address-table static 0011.2233.4455 vlan 10 interface gi0/1', 'mac address-table static 0011.2233.4455 vlan 10 interface GigabitEthernet 0/1', 'mac-address-table static 0011.2233.4455 vlan 10 interface GigabitEthernet0/1'],
+    hint: 'mac address-table static <mac> vlan <id> interface <port>',
+    wrong: [
+      { text: 'mac address-table static 0011.2233.4455 interface GigabitEthernet0/1', why: 'Lipsește parametrul vlan.' },
+      { text: 'mac address-table 0011.2233.4455 vlan 10 interface GigabitEthernet0/1', why: 'Lipsește cuvântul static.' },
+      { text: 'mac address-table static 0011.2233.4455 vlan 10 GigabitEthernet0/1', why: 'Lipsește cuvântul interface.' },
+    ],
+    explanation: 'Intrarea statică nu expiră și supraviețuiește comenzii clear dynamic.',
+  },
+  {
+    id: '1.13-036', topicId: T, sub: '1.13.d', type: 'single', difficulty: 2,
+    stem: 'Ce intrări rămân după comanda clear mac address-table dynamic?',
+    options: [
+      { id: 'a', text: 'Cele statice', correct: true, why: 'Comanda șterge doar intrările învățate dinamic.' },
+      { id: 'b', text: 'Niciuna; toată tabela e ștearsă', correct: false, why: 'Statice rămân.' },
+      { id: 'c', text: 'Doar cele din VLAN 1', correct: false, why: 'Comanda nu are legătură cu VLAN-ul decât dacă îl specifici.' },
+      { id: 'd', text: 'Doar intrările cu aging mai mic de 60 s', correct: false, why: 'Nu există filtru pe vârstă.' },
+    ],
+    explanation: 'Statice nu expiră și nu sunt șterse de clear dynamic.',
+  },
+  {
+    id: '1.13-037', topicId: T, sub: '1.13.d', type: 'single', difficulty: 2,
+    stem: 'Ce arată coloana „Type” din show mac address-table?',
+    options: [
+      { id: 'a', text: 'Dacă intrarea a fost învățată dinamic (DYNAMIC) sau a fost configurată (STATIC)', correct: true, why: 'Tipul determină dacă intrarea expiră.' },
+      { id: 'b', text: 'Tipul cablului conectat', correct: false, why: 'Cablul nu e raportat în tabela MAC.' },
+      { id: 'c', text: 'Tipul de trafic: unicast sau multicast', correct: false, why: 'Tipul traficului nu apare în coloană.' },
+      { id: 'd', text: 'Viteza portului', correct: false, why: 'Viteza se vede în show interfaces.' },
+    ],
+    explanation: 'DYNAMIC (învățat, expiră) vs STATIC (configurat sau CPU).',
+  },
+  {
+    id: '1.13-038', topicId: T, sub: '1.13.d', type: 'single', difficulty: 3,
+    stem: 'Tabela MAC arată aceeași adresă 00cc.cccc.cccc alternând între Gi0/1 și Gi0/2, iar syslog afișează MACFLAP_NOTIF. Care este cea mai probabilă cauză?',
+    options: [
+      { id: 'a', text: 'O buclă de nivel 2 sau o legătură redundantă fără protecție (STP)', correct: true, why: 'Cadrele aceleiași stații ajung pe două căi, deci intrarea se mută repetat.' },
+      { id: 'b', text: 'Aging time prea mare', correct: false, why: 'Un aging mare nu mută intrarea între porturi.' },
+      { id: 'c', text: 'Tabela MAC este goală', correct: false, why: 'Intrarea există, chiar dacă se schimbă.' },
+      { id: 'd', text: 'Un cadru multicast IPv6', correct: false, why: 'Multicastul nu apare ca sursă și nu declanșează flapping.' },
+    ],
+    explanation: 'Flapping = buclă sau configurare greșită; rezolvă cauza.',
+  },
+  {
+    id: '1.13-039', topicId: T, sub: '1.13.d', type: 'single', difficulty: 2,
+    stem: 'Ce este CAM?',
+    options: [
+      { id: 'a', text: 'Memorie hardware căutată după conținut, în care se păstrează tabela MAC', correct: true, why: 'Permite o căutare a unui MAC într-un singur ciclu, la viteza liniei.' },
+      { id: 'b', text: 'Un protocol de rutare', correct: false, why: 'CAM este memorie, nu protocol.' },
+      { id: 'c', text: 'Un tip de cablu', correct: false, why: 'Nu are legătură cu cablarea.' },
+      { id: 'd', text: 'Tabela ARP a switch-ului', correct: false, why: 'ARP leagă IP de MAC pe stații și routere; CAM conține MAC → port.' },
+    ],
+    explanation: 'CAM = Content Addressable Memory; „CAM table” = tabela MAC.',
+  },
+  {
+    id: '1.13-040', topicId: T, sub: '1.13.d', type: 'single', difficulty: 2,
+    stem: 'De ce un router aruncă un pachet cu destinație necunoscută, iar un switch inundă un cadru cu destinație necunoscută?',
+    options: [
+      { id: 'a', text: 'Routerul are rute explicite pe care le consultă și fără potrivire aruncă pachetul; switch-ul funcționează într-un singur domeniu de broadcast și nu are altă cale de a găsi destinația decât să încerce pe toate porturile', correct: true, why: 'Un switch nu are „ghid de rutare”, doar o tabelă învățată din trafic.' },
+      { id: 'b', text: 'Switch-ul are mai multă memorie', correct: false, why: 'Memoria nu explică diferența.' },
+      { id: 'c', text: 'Routerul funcționează doar în IPv6', correct: false, why: 'Routerul gestionează IPv4 și IPv6.' },
+      { id: 'd', text: 'Switch-ul nu verifică FCS', correct: false, why: 'Verificarea FCS e independentă de decizia de forwarding.' },
+    ],
+    explanation: 'Router: fără rută ⇒ drop. Switch: fără intrare MAC ⇒ flood.',
+  },
+  {
+    id: '1.13-041', topicId: T, sub: '1.13.d', type: 'multi', difficulty: 2,
+    stem: 'Care DOUĂ afirmații despre intrările statice sunt corecte?',
+    options: [
+      { id: 'a', text: 'Nu expiră niciodată prin aging', correct: true, why: 'Rămân până sunt șterse manual.' },
+      { id: 'b', text: 'Se creează cu mac address-table static', correct: true, why: 'Comanda leagă un MAC și un VLAN de un port.' },
+      { id: 'c', text: 'Sunt șterse de clear mac address-table dynamic', correct: false, why: 'Acea comandă șterge doar intrările dinamice.' },
+      { id: 'd', text: 'Sunt învățate automat din cadre', correct: false, why: 'Învățarea automată produce intrări dinamice.' },
+    ],
+    explanation: 'Statice: manuale, permanente, imune la aging și la clear dynamic.',
+  },
+];

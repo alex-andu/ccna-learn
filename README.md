@@ -108,11 +108,9 @@ cd /opt/ccna-learn && git pull && npm ci && npm run build && sudo systemctl rest
 
 ## Adăugarea de conținut (topicuri noi)
 
-1. `web/src/data/curriculum.ts` — adaugă ID-ul în `AVAILABLE`.
-2. `web/src/content/<topic>/` — lecția (componente React: `Summary`, `Detailed`, `DeepDive`, `Traps`, `CodeBlock`, diagrame).
-3. `web/src/content/registry.ts` — secțiunile topicului (TOC + progres).
-4. `web/src/data/questions/<topic>.ts` — întrebările (fiecare variantă cu `why`).
-5. `web/src/data/glossary.ts` — termenii noi (`what` / `how` / `where`); în texte: `<Term id="..."/>` sau `[[id]]` în date.
+> **Rețeta veche în 5 pași a fost eliminată (depășită)**: ea trimitea termenii în `glossary.ts` și `AVAILABLE` la început. Arhitectura actuală folosește `data/terms/<tX_Y>.ts`, `data/facts/`, agregare automată, iar `AVAILABLE` se modifică doar cu aprobarea explicită a utilizatorului.
+>
+> Singura procedură autoritativă: [`docs/WORKFLOW.md`](docs/WORKFLOW.md).
 
 ## Surse și licențe
 

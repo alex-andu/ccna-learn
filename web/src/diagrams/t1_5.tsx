@@ -181,7 +181,7 @@ export function PortsSockets() {
           <g key={i} onClick={() => setSel(i)} style={{ cursor: 'pointer' }}>
             <rect x={22} y={k.y - 16} width={136} height={32} rx={7} fill={sel === i ? 'var(--accent-soft)' : 'var(--surface-3)'} stroke={sel === i ? 'var(--accent)' : 'var(--border)'} />
             <T x={90} y={k.y + 4} size={11.5} weight={600}>{k.app}</T>
-            <rect x={162} y={k.y - 12} width={70} height={24} rx={5} fill="var(--code-bg)" stroke={sel === i ? 'var(--accent)' : 'var(--border)'} />
+            <rect x={162} y={k.y - 12} width={70} height={24} rx={5} fill="var(--surface-2)" stroke={sel === i ? 'var(--accent)' : 'var(--border)'} />
             <T x={197} y={k.y + 4} size={11} m color={k.proto === 'UDP' ? 'var(--warn)' : 'var(--accent)'}>{`:${k.sport}`}</T>
             <line x1={234} y1={k.y} x2={520} y2={srvY[k.dip]} stroke={sel === i ? 'var(--accent)' : 'var(--border-strong)'} strokeWidth={sel === i ? 2.4 : 1.4} className={sel === i ? 'flow' : undefined} />
             <rect x={300 + i * 14} y={(k.y + srvY[k.dip]) / 2 - 22 + (i === 1 ? 10 : 0)} width={40} height={16} rx={4} fill="var(--surface)" />

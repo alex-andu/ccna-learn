@@ -1,0 +1,480 @@
+import type { Question } from '../../lib/types';
+
+// Banca de întrebări pentru 1.12 Explain virtualization fundamentals (server virtualization, containers, and VRFs).
+// Fiecare variantă are explicație — atât cea corectă, cât și cele greșite.
+// Obiectivul oficial 1.12 nu are sub-puncte, deci `sub` = '1.12'.
+const T = '1.12';
+
+export const Q_1_12: Question[] = [
+  // ======================= Idei generale =======================
+  {
+    id: '1.12-001', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Ce problemă a rezolvat în primul rând virtualizarea serverelor?',
+    options: [
+      { id: 'a', text: 'Serverele fizice folosite doar o mică parte din capacitate, câte o aplicație pe server; virtualizarea permite consolidarea mai multor VM-uri pe un singur server', correct: true, why: 'Consolidarea reduce numărul de servere, spațiul, curentul și răcirea, păstrând izolarea dintre aplicații.' },
+      { id: 'b', text: 'Lipsa adreselor IPv4, prin crearea de adrese virtuale', correct: false, why: 'Epuizarea IPv4 se tratează cu NAT și IPv6; virtualizarea serverelor nu creează adrese.' },
+      { id: 'c', text: 'Viteza prea mică a cablurilor Ethernet', correct: false, why: 'Virtualizarea nu mărește viteza cablurilor; trebuie chiar să partajezi plăcile de rețea fizice.' },
+      { id: 'd', text: 'Necesitatea de a folosi același sistem de operare pe toate serverele', correct: false, why: 'Dimpotrivă: fiecare VM poate avea alt sistem de operare (Windows, Linux).' },
+    ],
+    explanation: 'Un server, mai multe VM-uri izolate: utilizare mai bună a hardware-ului, provizionare rapidă, snapshot-uri, live migration.',
+  },
+  {
+    id: '1.12-002', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care dintre perechi asociază corect tehnologia cu ceea ce virtualizează?',
+    options: [
+      { id: 'a', text: 'VM — hardware-ul serverului; container — sistemul de operare (kernelul rămâne partajat); VRF — rutarea de nivel 3 a unui router', correct: true, why: 'Cele trei tehnologii virtualizează straturi diferite: hardware, sistem de operare și planul de rutare.' },
+      { id: 'b', text: 'VM — tabela de rutare; container — hardware-ul; VRF — sistemul de operare', correct: false, why: 'Perechile sunt inversate: tabela de rutare e a VRF-ului, nu a VM-ului.' },
+      { id: 'c', text: 'VM — domeniul de broadcast; container — hypervisorul; VRF — kernelul', correct: false, why: 'Domeniul de broadcast ține de VLAN, nu de VM; containerul nu este un hypervisor.' },
+      { id: 'd', text: 'Toate trei virtualizează exact același lucru: hardware-ul', correct: false, why: 'Doar VM-ul virtualizează hardware-ul. Containerul și VRF-ul lucrează la alte straturi.' },
+    ],
+    explanation: 'Întreabă-te mereu „ce se împarte?”: hardware (VM), kernel (container), rutare L3 (VRF).',
+  },
+  {
+    id: '1.12-003', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Un administrator vrea să salveze starea unei VM înainte de o actualizare și să poată reveni dacă ceva nu merge. Ce facilitate a virtualizării folosește?',
+    options: [
+      { id: 'a', text: 'Snapshot', correct: true, why: 'Snapshot-ul salvează starea VM-ului (disc și, opțional, memorie), pentru revenire rapidă.' },
+      { id: 'b', text: 'NIC teaming', correct: false, why: 'Teaming grupează plăcile fizice pentru redundanță; nu salvează starea unei VM.' },
+      { id: 'c', text: 'Port mapping', correct: false, why: 'Port mapping expune portul unui container; nu are legătură cu revenirea la o stare.' },
+      { id: 'd', text: 'Route leaking', correct: false, why: 'Este un concept de VRF (scurgerea de rute între tabele), nu o facilitate de VM.' },
+    ],
+    explanation: 'Pentru că VM-ul e în esență fișiere (config + disc), poate fi copiat, clonat, salvat cu snapshot sau mutat.',
+  },
+  {
+    id: '1.12-004', topicId: T, sub: '1.12', type: 'multi', difficulty: 2,
+    stem: 'Care DOUĂ sunt beneficii ale virtualizării serverelor?',
+    options: [
+      { id: 'a', text: 'Utilizare mai bună a hardware-ului prin consolidare', correct: true, why: 'Mai multe VM-uri pe același server înseamnă mai puține servere fizice.' },
+      { id: 'b', text: 'Provizionare rapidă a serverelor noi (clonare dintr-un șablon)', correct: true, why: 'Pornești o VM în minute, în loc să comanzi și să instalezi un server.' },
+      { id: 'c', text: 'Eliminarea completă a nevoii de rețea fizică', correct: false, why: 'VM-urile au tot nevoie de switch-uri, cabluri și uplink-uri fizice pentru a comunica în exterior.' },
+      { id: 'd', text: 'Toate VM-urile folosesc obligatoriu același kernel', correct: false, why: 'Aceasta este caracteristica containerelor; fiecare VM are propriul sistem de operare.' },
+    ],
+    explanation: 'Consolidare, provizionare rapidă, snapshot-uri, live migration, izolare. Rețeaua fizică rămâne necesară.',
+  },
+  {
+    id: '1.12-005', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Ce este un hypervisor?',
+    options: [
+      { id: 'a', text: 'Software care creează și rulează mașini virtuale, împărțind resursele hardware între ele', correct: true, why: 'Hypervisorul (VMM) alocă CPU, RAM, disc și rețea fiecărei VM și le izolează.' },
+      { id: 'b', text: 'Un switch fizic special pentru servere', correct: false, why: 'Switch-ul fizic comută cadre; hypervisorul este software de virtualizare.' },
+      { id: 'c', text: 'O platformă de orchestrare a containerelor', correct: false, why: 'Aceea este Kubernetes (sau similar), nu un hypervisor.' },
+      { id: 'd', text: 'Un protocol de rutare între VRF-uri', correct: false, why: 'Hypervisorul nu este un protocol și nu are legătură cu rutarea între VRF-uri.' },
+    ],
+    explanation: 'Hypervisor = VMM, stratul care creează și gestionează VM-urile.',
+  },
+  // ======================= Server =======================
+  {
+    id: '1.12-006', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Care tip de hypervisor rulează direct pe hardware-ul serverului, fără un sistem de operare general dedesubt?',
+    options: [
+      { id: 'a', text: 'Type 1 (bare-metal)', correct: true, why: 'Type 1 este primul software care pornește pe server și controlează hardware-ul.' },
+      { id: 'b', text: 'Type 2 (hosted)', correct: false, why: 'Type 2 rulează ca aplicație peste un sistem de operare gazdă.' },
+      { id: 'c', text: 'Type 3', correct: false, why: 'Nu există un „Type 3” în clasificarea standard.' },
+      { id: 'd', text: 'Container engine', correct: false, why: 'Un container engine rulează containere pe un kernel existent; nu este un hypervisor.' },
+    ],
+    explanation: 'Type 1 = bare-metal (ESXi, Hyper-V, Xen, KVM); Type 2 = hosted (VirtualBox, Workstation).',
+  },
+  {
+    id: '1.12-007', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Care dintre următoarele este un hypervisor de tip 2?',
+    options: [
+      { id: 'a', text: 'Oracle VirtualBox', correct: true, why: 'VirtualBox se instalează ca aplicație pe Windows, macOS sau Linux.' },
+      { id: 'b', text: 'VMware ESXi', correct: false, why: 'ESXi rulează direct pe hardware — Type 1.' },
+      { id: 'c', text: 'Xen', correct: false, why: 'Xen este un hypervisor Type 1.' },
+      { id: 'd', text: 'Docker', correct: false, why: 'Docker nu este un hypervisor; rulează containere.' },
+    ],
+    explanation: 'Type 2: VirtualBox, VMware Workstation/Fusion, Parallels.',
+  },
+  {
+    id: '1.12-008', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Microsoft Hyper-V se activează dintr-un Windows Server. Cum se clasifică?',
+    options: [
+      { id: 'a', text: 'Hypervisor Type 1: după activare, Windows-ul rulează ca partiție peste hypervisor', correct: true, why: 'Hyper-V pornește înaintea sistemului de operare și îl pune într-o partiție de management.' },
+      { id: 'b', text: 'Hypervisor Type 2, fiindcă se instalează dintr-un sistem de operare', correct: false, why: 'Locul de unde îl activezi nu contează; important e cine controlează hardware-ul în execuție.' },
+      { id: 'c', text: 'Container engine', correct: false, why: 'Hyper-V creează VM-uri cu hardware virtual, nu containere.' },
+      { id: 'd', text: 'Virtual switch', correct: false, why: 'Hyper-V include un virtual switch, dar el însuși este un hypervisor.' },
+    ],
+    explanation: 'Hyper-V = Type 1, deși pare „instalat pe Windows”.',
+  },
+  {
+    id: '1.12-009', topicId: T, sub: '1.12', type: 'match', difficulty: 2,
+    stem: 'Potrivește fiecare termen cu definiția corectă.',
+    leftLabel: 'Termen', rightLabel: 'Definiție',
+    pairs: [
+      { left: 'Host', right: 'serverul fizic (sau OS-ul gazdă) care oferă resursele', why: 'Host-ul este mașina reală pe care rulează virtualizarea.' },
+      { left: 'Guest', right: 'VM-ul găzduit împreună cu sistemul lui de operare', why: 'Guest-ul este „oaspetele” rulat de hypervisor.' },
+      { left: 'vNIC', right: 'placă de rețea virtuală a unei VM, cu MAC propriu', why: 'Se comportă ca o placă reală pentru sistemul din VM.' },
+      { left: 'Virtual switch', right: 'switch software în hypervisor care conectează vNIC-urile', why: 'Comută cadre între VM-uri și spre uplink-urile fizice.' },
+      { left: 'Uplink', right: 'placa fizică a hostului spre switch-ul din rețea', why: 'Prin uplink iese traficul VM-urilor din host.' },
+    ],
+    distractors: [{ text: 'orchestrator de containere pe un cluster', why: 'Aceasta este definiția Kubernetes, nu a vreunui termen din listă.' }],
+    explanation: 'Host ↔ guest, vNIC ↔ vSwitch ↔ uplink: lanțul care duce o VM în rețea.',
+  },
+  {
+    id: '1.12-010', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Rulezi GNS3 VM în VirtualBox pe laptopul tău cu Windows. Ce tip de hypervisor folosești?',
+    options: [
+      { id: 'a', text: 'Type 2 — VirtualBox rulează ca aplicație peste Windows', correct: true, why: 'Sistemul gazdă (Windows) controlează hardware-ul; VirtualBox îi cere resurse.' },
+      { id: 'b', text: 'Type 1 — pentru că VM-ul rulează „aproape direct” pe procesor', correct: false, why: 'Rularea pe procesor cu ajutorul VT-x se aplică ambelor tipuri; contează ce se află sub hypervisor.' },
+      { id: 'c', text: 'Niciunul, GNS3 VM este un container', correct: false, why: 'GNS3 VM este o mașină virtuală, nu un container.' },
+      { id: 'd', text: 'Un VRF', correct: false, why: 'VRF-ul este o funcție de rutare, nu o platformă de virtualizare a serverelor.' },
+    ],
+    explanation: 'Laburile pe laptop = hypervisor Type 2 (VirtualBox, VMware Workstation).',
+  },
+  {
+    id: '1.12-011', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Ce este un vNIC?',
+    options: [
+      { id: 'a', text: 'O placă de rețea virtuală a unei VM, cu propria adresă MAC, conectată la un virtual switch', correct: true, why: 'Pentru rețea, vNIC-ul se comportă ca o placă reală: trimite cadre, are IP, face ARP.' },
+      { id: 'b', text: 'Placa fizică a serverului', correct: false, why: 'Aceea este un uplink (NIC fizic).' },
+      { id: 'c', text: 'Un tip de cablu pentru VM-uri', correct: false, why: 'Nu există cabluri virtuale în acest sens; vNIC este o interfață software.' },
+      { id: 'd', text: 'Adresa IP a hypervisorului', correct: false, why: 'Un vNIC este o interfață, nu o adresă IP.' },
+    ],
+    explanation: 'vNIC → vSwitch → uplink fizic → switch ToR.',
+  },
+  {
+    id: '1.12-012', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'VM1 și VM2 rulează pe același host și sunt în același VLAN, conectate la același vSwitch. Pe unde circulă un cadru de la VM1 la VM2?',
+    options: [
+      { id: 'a', text: 'Prin vSwitch, în interiorul hostului; cadrul nu ajunge pe cablul spre switch-ul fizic', correct: true, why: 'vSwitch-ul comută local după MAC când destinația e pe același host și în același VLAN.' },
+      { id: 'b', text: 'Obligatoriu prin switch-ul fizic și înapoi', correct: false, why: 'Nu e necesar: vSwitch-ul cunoaște MAC-ul destinației pe un port local.' },
+      { id: 'c', text: 'Prin routerul default gateway', correct: false, why: 'Ele sunt în același VLAN/subrețea; traficul local nu trece prin gateway.' },
+      { id: 'd', text: 'Prin internet', correct: false, why: 'Traficul dintre două VM-uri locale nu are motiv să iasă în internet.' },
+    ],
+    explanation: 'Același host + același VLAN = comutare internă; nu apare pe uplink.',
+  },
+  {
+    id: '1.12-013', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'VM1 (VLAN 10) trebuie să comunice cu VM3 (VLAN 20), ambele pe același host. Ce este necesar?',
+    options: [
+      { id: 'a', text: 'Un dispozitiv de nivel 3 (router sau switch L3 cu SVI-uri): traficul iese pe trunk spre switch-ul fizic și revine în celălalt VLAN', correct: true, why: 'VLAN-urile diferite sunt rețele IP diferite; trecerea între ele cere rutare.' },
+      { id: 'b', text: 'Nimic — un vSwitch rutează automat între VLAN-uri', correct: false, why: 'Un vSwitch standard lucrează la nivel 2 și nu rutează între VLAN-uri.' },
+      { id: 'c', text: 'Ca VM-urile să aibă aceeași adresă MAC', correct: false, why: 'MAC-urile duplicate strică comutarea; nu rezolvă nimic.' },
+      { id: 'd', text: 'Un hypervisor de tip 2', correct: false, why: 'Tipul hypervisorului nu schimbă regulile de rutare între VLAN-uri.' },
+    ],
+    explanation: 'Inter-VLAN routing: cadrul pleacă pe uplink, este rutat pe L3 și revine pe același cablu („hairpin”).',
+  },
+  {
+    id: '1.12-014', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Un host de virtualizare găzduiește VM-uri în VLAN-urile 10, 20 și 30. Cum se configurează, de regulă, portul switch-ului la care e conectat uplink-ul?',
+    options: [
+      { id: 'a', text: 'Trunk 802.1Q, cu VLAN-urile 10, 20 și 30 permise', correct: true, why: 'Pe un singur cablu trebuie să treacă mai multe VLAN-uri etichetate.' },
+      { id: 'b', text: 'Port de acces în VLAN 10', correct: false, why: 'Un port de acces transportă un singur VLAN; VM-urile din 20 și 30 ar rămâne izolate.' },
+      { id: 'c', text: 'Port în shutdown', correct: false, why: 'Un port oprit nu transportă niciun trafic.' },
+      { id: 'd', text: 'Port de consolă', correct: false, why: 'Consola este pentru administrarea CLI, nu pentru date.' },
+    ],
+    explanation: 'Portul spre host = trunk; VLAN-urile port group-urilor trebuie permise pe el.',
+  },
+  {
+    id: '1.12-015', topicId: T, sub: '1.12', type: 'multi', difficulty: 3,
+    stem: 'Un host are două uplink-uri grupate (NIC teaming). Care DOUĂ avantaje oferă?',
+    options: [
+      { id: 'a', text: 'Redundanță: dacă un uplink cade, traficul continuă pe celălalt', correct: true, why: 'Ținta principală a teaming-ului este disponibilitatea.' },
+      { id: 'b', text: 'Lățime de bandă agregată în funcție de modul ales', correct: true, why: 'În anumite moduri, fluxurile diferite se distribuie pe uplink-uri diferite.' },
+      { id: 'c', text: 'VM-urile pot folosi același MAC pe ambele uplink-uri', correct: false, why: 'MAC-urile VM-urilor rămân distincte; teaming-ul nu le unifică.' },
+      { id: 'd', text: 'Elimină nevoia de VLAN-uri', correct: false, why: 'Teaming-ul nu are legătură cu segmentarea în VLAN-uri.' },
+    ],
+    explanation: 'Teaming = redundanță + (uneori) mai multă lățime de bandă; configurația switch-ului trebuie să corespundă modului ales.',
+  },
+  {
+    id: '1.12-016', topicId: T, sub: '1.12', type: 'single', difficulty: 3,
+    stem: 'Ce afirmație despre un virtual switch standard dintr-un hypervisor este corectă?',
+    options: [
+      { id: 'a', text: 'Este un switch software care învață MAC-uri și suportă VLAN-uri, dar de regulă nu rulează STP', correct: true, why: 'Evită buclele prin reguli simple (de exemplu nu retransmite cadre de pe un uplink pe altul).' },
+      { id: 'b', text: 'Este un ASIC dedicat, instalat în server', correct: false, why: 'vSwitch-ul este software în hypervisor.' },
+      { id: 'c', text: 'Rutează între orice VLAN-uri', correct: false, why: 'Un vSwitch standard nu face rutare între VLAN-uri.' },
+      { id: 'd', text: 'Trebuie să fie conectat într-un trunk STP root', correct: false, why: 'Nu participă la alegerea root bridge-ului.' },
+    ],
+    explanation: 'vSwitch ≈ switch de nivel 2 în software; politicile se aplică pe port group.',
+  },
+  {
+    id: '1.12-017', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Ce face live migration (de exemplu vMotion)?',
+    options: [
+      { id: 'a', text: 'Mută o VM pornită de pe un host pe altul fără întrerupere vizibilă', correct: true, why: 'Se copiază starea memoriei și CPU; VM-ul își păstrează IP-ul și MAC-ul.' },
+      { id: 'b', text: 'Convertește o VM într-un container', correct: false, why: 'Live migration mută VM-ul, nu îl transformă.' },
+      { id: 'c', text: 'Mută rutele dintr-un VRF în altul', correct: false, why: 'Aceasta ar fi route leaking, un concept de VRF.' },
+      { id: 'd', text: 'Rescrie adresa IP a VM-ului la fiecare mutare', correct: false, why: 'IP-ul rămâne același; de aceea VLAN-ul trebuie să existe pe ambele hosturi.' },
+    ],
+    explanation: 'VLAN-ul VM-ului trebuie permis pe trunk-urile ambelor hosturi.',
+  },
+  {
+    id: '1.12-018', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'O VM VirtualBox folosește modul implicit NAT. Ce este adevărat?',
+    options: [
+      { id: 'a', text: 'VM-ul ajunge în Internet, dar nu poate fi accesat din LAN (fără port forwarding)', correct: true, why: 'VirtualBox face NAT ca un mini-router, fără mapări de intrare.' },
+      { id: 'b', text: 'VM-ul primește o adresă din LAN-ul fizic', correct: false, why: 'Aceasta este caracteristica modului Bridged.' },
+      { id: 'c', text: 'VM-ul este vizibil direct în LAN, cu MAC propriu', correct: false, why: 'Tot Bridged oferă asta.' },
+      { id: 'd', text: 'VM-ul nu poate ieși deloc din host', correct: false, why: 'NAT permite tocmai ieșirea spre exterior.' },
+    ],
+    explanation: 'NAT = doar ieșire. Bridged = în LAN. Host-only = PC↔VM. Internal = doar VM↔VM.',
+  },
+  {
+    id: '1.12-019', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care mod de rețea VirtualBox face ca VM-ul să apară în LAN ca un calculator separat, cu adresă MAC proprie și IP primit prin DHCP de la routerul de acasă?',
+    options: [
+      { id: 'a', text: 'Bridged Adapter', correct: true, why: 'Placa fizică devine uplink-ul unui switch virtual la care e atașat VM-ul.' },
+      { id: 'b', text: 'NAT', correct: false, why: 'NAT ascunde VM-ul în spatele adresei hostului.' },
+      { id: 'c', text: 'Host-only', correct: false, why: 'Host-only nu are uplink către LAN.' },
+      { id: 'd', text: 'Internal Network', correct: false, why: 'Internal este izolat între VM-uri, fără host și fără LAN.' },
+    ],
+    explanation: 'Bridged = VM în LAN.',
+  },
+  {
+    id: '1.12-020', topicId: T, sub: '1.12', type: 'single', difficulty: 3,
+    stem: 'Ce este NFV (Network Functions Virtualization)?',
+    options: [
+      { id: 'a', text: 'Rularea funcțiilor de rețea (router, firewall, controller wireless) ca software pe servere standard, în loc de aparate dedicate', correct: true, why: 'Exemple: Catalyst 8000V, ASAv/FTDv, Catalyst 9800-CL.' },
+      { id: 'b', text: 'Un protocol care separă planul de control de planul de date', correct: false, why: 'Aceea este ideea SDN, diferită de NFV.' },
+      { id: 'c', text: 'O metodă de a crea mai multe tabele de rutare', correct: false, why: 'Aceasta este VRF.' },
+      { id: 'd', text: 'Un tip de cablu pentru servere', correct: false, why: 'NFV este o abordare software, nu un cablu.' },
+    ],
+    explanation: 'NFV = funcții de rețea virtuale (VNF) pe hardware comun; SDN = control programabil.',
+  },
+  // ======================= Containere =======================
+  {
+    id: '1.12-021', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Ce partajează containerele de pe același host?',
+    options: [
+      { id: 'a', text: 'Kernelul sistemului de operare gazdă', correct: true, why: 'Containerele nu au kernel propriu; sunt procese izolate pe același kernel.' },
+      { id: 'b', text: 'Fiecare își are propriul kernel', correct: false, why: 'Așa funcționează VM-urile, nu containerele.' },
+      { id: 'c', text: 'Aceeași tabelă de rutare VRF', correct: false, why: 'Containerele nu au legătură cu VRF; fiecare are propria stivă de rețea prin namespace.' },
+      { id: 'd', text: 'Același hypervisor Type 2', correct: false, why: 'Containerele nu au nevoie de un hypervisor.' },
+    ],
+    explanation: 'Containere = kernel comun; VM-uri = kernel propriu.',
+  },
+  {
+    id: '1.12-022', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Față de o VM, un container este de obicei…',
+    options: [
+      { id: 'a', text: 'mai mic și mai rapid la pornire, dar mai puțin izolat', correct: true, why: 'Nu include un sistem de operare complet, dar partajarea kernelului reduce izolarea.' },
+      { id: 'b', text: 'mai mare și mai lent la pornire, dar mai izolat', correct: false, why: 'Acestea sunt caracteristicile VM-urilor.' },
+      { id: 'c', text: 'la fel de mare, dar cu un kernel propriu', correct: false, why: 'Containerul nu are kernel propriu.' },
+      { id: 'd', text: 'folosit doar pe routere', correct: false, why: 'Containerele rulează pe servere și în cloud; doar unele echipamente de rețea le suportă.' },
+    ],
+    explanation: 'MB vs GB, secunde vs minute, izolare mai slabă.',
+  },
+  {
+    id: '1.12-023', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care dintre cele două tehnologii oferă izolare mai puternică între instanțe, și de ce?',
+    options: [
+      { id: 'a', text: 'VM-urile, fiindcă fiecare are propriul kernel și hardware virtual', correct: true, why: 'Un defect de kernel dintr-o VM nu afectează direct celelalte VM-uri.' },
+      { id: 'b', text: 'Containerele, fiindcă împart kernelul', correct: false, why: 'Kernelul comun este chiar motivul pentru care izolarea e mai slabă.' },
+      { id: 'c', text: 'Sunt la fel de izolate', correct: false, why: 'Diferența există: VM = kernel separat, container = kernel comun.' },
+      { id: 'd', text: 'Niciuna, ambele folosesc același hypervisor', correct: false, why: 'Containerele nu folosesc hypervisor.' },
+    ],
+    explanation: 'De aceea mediile multi-tenant rulează adesea containerele în interiorul VM-urilor.',
+  },
+  {
+    id: '1.12-024', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care este diferența dintre o imagine de container și un container?',
+    options: [
+      { id: 'a', text: 'Imaginea este șablonul read-only; containerul este o instanță în execuție a imaginii', correct: true, why: 'Din aceeași imagine pot porni mai multe containere.' },
+      { id: 'b', text: 'Sunt același lucru, cu nume diferite', correct: false, why: 'Una este șablon, cealaltă este un proces în execuție.' },
+      { id: 'c', text: 'Containerul este șablonul, imaginea este procesul', correct: false, why: 'Ordinea este inversată.' },
+      { id: 'd', text: 'Imaginea este un hypervisor', correct: false, why: 'Nu are legătură cu hypervisorul.' },
+    ],
+    explanation: 'Dockerfile → build → image → pull/push registry → run → container.',
+  },
+  {
+    id: '1.12-025', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care este rolul Kubernetes?',
+    options: [
+      { id: 'a', text: 'Orchestrează containere pe un cluster de servere: planificare, scalare, self-healing', correct: true, why: 'Compară continuu starea dorită cu cea reală și o corectează.' },
+      { id: 'b', text: 'Creează VM-uri direct pe hardware', correct: false, why: 'Aceasta este rolul unui hypervisor.' },
+      { id: 'c', text: 'Rutează între VRF-uri', correct: false, why: 'Nu este un protocol de rutare.' },
+      { id: 'd', text: 'Înlocuiește Docker ca format de imagini', correct: false, why: 'Kubernetes folosește imagini OCI; nu le înlocuiește.' },
+    ],
+    explanation: 'Docker rulează containere; Kubernetes le coordonează pe mai multe mașini.',
+  },
+  {
+    id: '1.12-026', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Ce este un pod în Kubernetes?',
+    options: [
+      { id: 'a', text: 'Cea mai mică unitate planificată: unul sau mai multe containere care rulează împreună pe același nod, cu o singură adresă IP', correct: true, why: 'Containerele dintr-un pod comunică prin localhost și împart IP-ul.' },
+      { id: 'b', text: 'Un server fizic din cluster', correct: false, why: 'Aceasta este un nod.' },
+      { id: 'c', text: 'O imagine de container', correct: false, why: 'Imaginea este șablonul; podul este o unitate în execuție.' },
+      { id: 'd', text: 'Un VRF al clusterului', correct: false, why: 'Podul nu este o tabelă de rutare.' },
+    ],
+    explanation: 'Kubernetes pornește, oprește și mută pod-uri, nu containere individuale.',
+  },
+  {
+    id: '1.12-027', topicId: T, sub: '1.12', type: 'multi', difficulty: 3,
+    stem: 'Care DOUĂ afirmații despre containere sunt corecte?',
+    options: [
+      { id: 'a', text: 'Izolarea se bazează pe namespaces (ce vede procesul) și cgroups (cât poate folosi)', correct: true, why: 'Sunt mecanisme ale kernelului Linux.' },
+      { id: 'b', text: 'Un container Linux are nevoie de un kernel Linux; pe Windows/macOS Docker Desktop folosește o VM Linux', correct: true, why: 'Containerul nu are kernel propriu și îl împrumută de la gazdă.' },
+      { id: 'c', text: 'Fiecare container are propriul kernel', correct: false, why: 'Kernelul este comun.' },
+      { id: 'd', text: 'Docker este un hypervisor Type 2', correct: false, why: 'Docker nu creează hardware virtual și nu e hypervisor.' },
+    ],
+    explanation: 'Namespaces + cgroups; kernel partajat.',
+  },
+  {
+    id: '1.12-028', topicId: T, sub: '1.12', type: 'order', difficulty: 2,
+    stem: 'Ordonează fluxul tipic Docker, de la rețetă la un container care rulează.',
+    items: [
+      { text: 'Scrii un Dockerfile', why: 'Rețeta text care descrie imaginea.' },
+      { text: 'Construiești imaginea (docker build)', why: 'Din Dockerfile rezultă imaginea, pe straturi.' },
+      { text: 'Publici imaginea într-un registry (docker push)', why: 'Imaginea devine disponibilă altor hosturi.' },
+      { text: 'Descarci imaginea pe host (docker pull)', why: 'Hostul care va rula aplicația primește imaginea.' },
+      { text: 'Pornești un container din imagine (docker run)', why: 'Se creează instanța în execuție.' },
+    ],
+    explanation: 'Dockerfile → image → registry → pull → container.',
+  },
+  {
+    id: '1.12-029', topicId: T, sub: '1.12', type: 'cli', difficulty: 2,
+    stem: 'Pornește în fundal un container din imaginea nginx, numit „web”, cu portul 8088 al hostului mapat pe portul 80 al containerului.',
+    prompt: '$', canonical: 'docker run -d --name web -p 8088:80 nginx',
+    answers: ['docker run -d --name web -p 8088:80 nginx', 'docker run -d -p 8088:80 --name web nginx', 'docker run --name web -d -p 8088:80 nginx', 'docker run --name web -p 8088:80 -d nginx', 'docker run -p 8088:80 -d --name web nginx', 'docker run -p 8088:80 --name web -d nginx'],
+    hint: 'docker run, -d pentru fundal, --name, -p gazdă:container',
+    wrong: [
+      { text: 'docker run -d --name web -p 80:8088 nginx', why: 'Ordinea e gazdă:container; aici ar fi hostul 80 → containerul 8088, invers față de cerință.' },
+      { text: 'docker start nginx', why: 'start repornește un container existent; nu creează unul din imagine și nu mapează porturi.' },
+      { text: 'docker pull nginx', why: 'pull doar descarcă imaginea; nu pornește niciun container.' },
+    ],
+    explanation: '-d = detached (fundal), --name = nume, -p gazdă:container = mapare de port.',
+  },
+  // ======================= VRF =======================
+  {
+    id: '1.12-030', topicId: T, sub: '1.12', type: 'single', difficulty: 1,
+    stem: 'Ce este un VRF?',
+    options: [
+      { id: 'a', text: 'O tabelă de rutare (și interfețele ei) independentă, creată pe un router care poate avea mai multe', correct: true, why: 'VRF = Virtual Routing and Forwarding: mai multe routere virtuale într-unul fizic.' },
+      { id: 'b', text: 'Un domeniu de broadcast de nivel 2', correct: false, why: 'Aceasta este un VLAN.' },
+      { id: 'c', text: 'O VM care rulează un router', correct: false, why: 'VRF nu are propriul sistem de operare; este o funcție a routerului.' },
+      { id: 'd', text: 'Un tip de cablu pentru routere', correct: false, why: 'VRF este logic, nu fizic.' },
+    ],
+    explanation: 'Fiecare VRF are propria RIB, FIB, interfețe, rute și proces de rutare.',
+  },
+  {
+    id: '1.12-031', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Care este diferența dintre VLAN și VRF?',
+    options: [
+      { id: 'a', text: 'VLAN segmentează nivelul 2 (domenii de broadcast); VRF segmentează nivelul 3 (tabele de rutare)', correct: true, why: 'Funcționează la niveluri diferite și rezolvă probleme diferite.' },
+      { id: 'b', text: 'VLAN segmentează nivelul 3; VRF nivelul 2', correct: false, why: 'Sunt inversate.' },
+      { id: 'c', text: 'Sunt același lucru', correct: false, why: 'Nu: un VLAN nu permite adrese IP suprapuse pe același router, un VRF da.' },
+      { id: 'd', text: 'VRF se folosește doar pe switch-uri de acces', correct: false, why: 'VRF se folosește pe dispozitive de nivel 3 (routere, switch-uri L3).' },
+    ],
+    explanation: 'VLAN = L2; VRF = L3. Pot fi combinate (VLAN → SVI → VRF).',
+  },
+  {
+    id: '1.12-032', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Doi clienți folosesc ambii rețeaua 192.168.1.0/24 și trebuie conectați la același router. Ce tehnologie o permite fără conflict?',
+    options: [
+      { id: 'a', text: 'VRF — fiecare client în propriul VRF', correct: true, why: 'Tabelele de rutare separate permit aceleași prefixe pe același router.' },
+      { id: 'b', text: 'Două VLAN-uri pe același router, fără VRF', correct: false, why: 'Interfețele de nivel 3 din aceeași tabelă nu pot avea aceeași rețea.' },
+      { id: 'c', text: 'Un hypervisor Type 1', correct: false, why: 'Hypervisorul virtualizează servere, nu rutarea.' },
+      { id: 'd', text: 'Un container Docker', correct: false, why: 'Un container nu schimbă regulile tabelei de rutare a unui router.' },
+    ],
+    explanation: 'Adresele suprapuse = motivul clasic pentru VRF.',
+  },
+  {
+    id: '1.12-033', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Pe o interfață cu adresa IP configurată dai comanda „vrf forwarding CUST-A”. Ce se întâmplă?',
+    options: [
+      { id: 'a', text: 'Interfața intră în VRF, iar adresa IP este ștearsă — trebuie reintrodusă', correct: true, why: 'IOS afișează un mesaj „address removed due to enabling VRF”.' },
+      { id: 'b', text: 'Adresa IP se păstrează și se copiază în VRF', correct: false, why: 'Adresa se pierde la atașare.' },
+      { id: 'c', text: 'Interfața rămâne și în tabela globală', correct: false, why: 'O interfață aparține unui singur VRF (sau tabelei globale).' },
+      { id: 'd', text: 'Comanda e respinsă, fiindcă interfața are deja IP', correct: false, why: 'Comanda e acceptată; efectul e ștergerea IP-ului.' },
+    ],
+    explanation: 'Ordinea corectă: vrf forwarding, apoi ip address.',
+  },
+  {
+    id: '1.12-034', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'După mutarea interfețelor într-un VRF, „ping 10.10.10.1” de pe router eșuează, deși „ping vrf CUST-A 10.10.10.1” reușește. De ce?',
+    options: [
+      { id: 'a', text: 'Ping fără vrf folosește tabela de rutare globală, unde nu există ruta', correct: true, why: 'Fără cuvântul vrf, comenzile privesc doar tabela globală.' },
+      { id: 'b', text: 'Ping-ul simplu e blocat de firewall', correct: false, why: 'Nu e nevoie de firewall; diferența vine din tabela folosită.' },
+      { id: 'c', text: 'Ruta din VRF este coruptă', correct: false, why: 'Ruta din VRF funcționează, cum arată ping-ul cu vrf.' },
+      { id: 'd', text: 'Ping-ul nu funcționează niciodată cu VRF', correct: false, why: 'Funcționează cu cuvântul cheie vrf.' },
+    ],
+    explanation: 'Fals negativ clasic: folosește ping vrf, traceroute vrf, show ip route vrf.',
+  },
+  {
+    id: '1.12-035', topicId: T, sub: '1.12', type: 'cli', difficulty: 2,
+    stem: 'Afișează tabela de rutare a VRF-ului CUST-A.',
+    prompt: 'R1#', canonical: 'show ip route vrf CUST-A',
+    answers: ['show ip route vrf CUST-A', 'sh ip route vrf CUST-A', 'show ip route vrf CUST-A '],
+    hint: 'show ip route + cuvântul pentru VRF și numele',
+    wrong: [
+      { text: 'show ip route', why: 'Arată doar tabela globală.' },
+      { text: 'show vrf CUST-A', why: 'Arată interfețele și RD-ul VRF-ului, nu tabela de rutare.' },
+      { text: 'show ip vrf route CUST-A', why: 'Ordinea cuvintelor nu e corectă.' },
+    ],
+    explanation: 'show ip route vrf NUME.',
+  },
+  {
+    id: '1.12-036', topicId: T, sub: '1.12', type: 'cli', difficulty: 2,
+    stem: 'În configurația interfeței, atașează interfața la VRF-ul CUST-A (sintaxa nouă).',
+    prompt: 'R1(config-if)#', canonical: 'vrf forwarding CUST-A',
+    answers: ['vrf forwarding CUST-A', 'ip vrf forwarding CUST-A'],
+    hint: 'forwarding + numele VRF; apoi reintrodu adresa',
+    wrong: [
+      { text: 'vrf member CUST-A', why: 'Comanda „vrf member” se folosește pe alte platforme (de exemplu NX-OS), nu pe IOS/IOS-XE.' },
+      { text: 'ip address CUST-A', why: 'Nu setează VRF-ul; ip address cere o adresă.' },
+      { text: 'vrf definition CUST-A', why: 'Se dă în configurația globală pentru a crea VRF-ul, nu pe interfață.' },
+    ],
+    explanation: 'Atenție: ștergerea adresei IP la atașare.',
+  },
+  {
+    id: '1.12-037', topicId: T, sub: '1.12', type: 'single', difficulty: 3,
+    stem: 'Care este diferența dintre VRF-Lite și MPLS L3VPN?',
+    options: [
+      { id: 'a', text: 'VRF-Lite folosește VRF-uri fără MPLS (de obicei subinterfețe per VRF); MPLS L3VPN folosește VRF-uri în PE, MP-BGP și MPLS, cu RD și RT, la scara unui operator', correct: true, why: 'L3VPN scalează la sute de clienți; VRF-Lite nu.' },
+      { id: 'b', text: 'VRF-Lite este mai nou și îl înlocuiește pe L3VPN', correct: false, why: 'Nu este înlocuitor; au scopuri și scări diferite.' },
+      { id: 'c', text: 'MPLS L3VPN nu folosește VRF-uri', correct: false, why: 'VRF-urile din PE sunt chiar baza L3VPN.' },
+      { id: 'd', text: 'Nu există nicio diferență', correct: false, why: 'Diferă prin MPLS, MP-BGP și scară.' },
+    ],
+    explanation: 'La CCNA — doar conceptul.',
+  },
+  {
+    id: '1.12-038', topicId: T, sub: '1.12', type: 'match', difficulty: 3,
+    stem: 'Potrivește termenii MPLS L3VPN cu rolul lor.',
+    leftLabel: 'Termen', rightLabel: 'Rol',
+    pairs: [
+      { left: 'RD', right: 'face prefixele clienților unice în BGP, deși se suprapun', why: 'Route Distinguisher se adaugă în fața prefixului IPv4.' },
+      { left: 'RT', right: 'stabilește ce VRF-uri importă și exportă o rută', why: 'Route Target este o etichetă de tip extended community.' },
+      { left: 'PE', right: 'routerul operatorului care ține VRF-urile clienților', why: 'Provider Edge: aici trăiesc VRF-urile.' },
+      { left: 'CE', right: 'routerul clientului, conectat la PE', why: 'Customer Edge.' },
+      { left: 'P', right: 'router din miezul operatorului, fără rute de client', why: 'Provider: transportă doar trafic etichetat MPLS.' },
+    ],
+    distractors: [{ text: 'creează VM-uri pe hardware', why: 'Aceasta este funcția unui hypervisor.' }],
+    explanation: 'PE = „unde sunt VRF-urile”; RD = unicitate; RT = politică de import/export.',
+  },
+  {
+    id: '1.12-039', topicId: T, sub: '1.12', type: 'order', difficulty: 2,
+    stem: 'Ordonează pașii pentru a pune o interfață într-un VRF nou (sintaxa IOS-XE).',
+    items: [
+      { text: 'Creezi VRF-ul (vrf definition NUME)', why: 'VRF-ul trebuie să existe înainte de a-l folosi.' },
+      { text: 'Activezi address-family ipv4 în VRF', why: 'În sintaxa nouă, fără address-family VRF-ul nu are IPv4.' },
+      { text: 'Intri în interfață și dai vrf forwarding NUME', why: 'Atașează interfața; șterge adresa existentă.' },
+      { text: 'Configurezi ip address pe interfață', why: 'Adresa se introduce după atașare.' },
+      { text: 'Verifici cu show vrf și show ip route vrf NUME', why: 'Confirmi interfața în VRF și rutele conectate.' },
+    ],
+    explanation: 'Crearea → atașarea → adresa → verificarea.',
+  },
+  {
+    id: '1.12-040', topicId: T, sub: '1.12', type: 'cli', difficulty: 1,
+    stem: 'Afișează lista VRF-urilor, cu RD-ul și interfețele fiecăruia.',
+    prompt: 'R1#', canonical: 'show vrf',
+    answers: ['show vrf', 'sh vrf', 'show ip vrf', 'sh ip vrf'],
+    hint: 'show + vrf',
+    wrong: [
+      { text: 'show ip route', why: 'Arată tabela globală de rutare, nu lista VRF-urilor.' },
+      { text: 'show interfaces trunk', why: 'Arată trunk-urile 802.1Q, nu VRF-urile.' },
+      { text: 'show running-config', why: 'Arată toată configurația; nu este un rezumat al VRF-urilor.' },
+    ],
+    explanation: 'show vrf (sau show ip vrf) = prima verificare după configurare.',
+  },
+  {
+    id: '1.12-041', topicId: T, sub: '1.12', type: 'single', difficulty: 2,
+    stem: 'Un switch Catalyst are portul de management out-of-band într-un VRF dedicat (Mgmt-vrf). Ce motiv are, de regulă, această alegere?',
+    options: [
+      { id: 'a', text: 'Traficul de administrare (SSH, SNMP, syslog) nu se amestecă cu tabela de rutare a datelor', correct: true, why: 'Management-ul are propria tabelă, izolată de rutarea de date.' },
+      { id: 'b', text: 'Pentru a crește viteza portului de management', correct: false, why: 'VRF-ul nu schimbă viteza interfeței.' },
+      { id: 'c', text: 'Pentru ca switch-ul să devină un hypervisor', correct: false, why: 'Un VRF nu transformă switch-ul în hypervisor.' },
+      { id: 'd', text: 'Pentru a rula containere pe portul de management', correct: false, why: 'Containerele nu sunt legate de VRF-ul de management.' },
+    ],
+    explanation: 'Atenție: un ping fără „vrf Mgmt-vrf” nu ajunge în rețeaua de management.',
+  },
+];

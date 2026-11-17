@@ -210,6 +210,13 @@ export const TERMS: GlossaryEntry[] = [
     std: 'RFC 3031', topics: ['1.2'],
   },
   {
+    id: 'pe-router', abbr: 'PE', full: 'Provider Edge router', ro: 'routerul de margine al providerului',
+    what: 'Routerul operatorului (providerului) la care se conectează routerul CE al clientului.',
+    how: 'Primește rutele de la CE, ține rutele fiecărui client separat (câte un VRF per client) și, într-o rețea MPLS, adaugă sau scoate eticheta MPLS pe pachetele clientului.',
+    where: 'La marginea rețelei providerului, la capătul legăturii spre fiecare site de client dintr-un serviciu MPLS WAN.',
+    topics: ['1.2'],
+  },
+  {
     id: 'ce-router', abbr: 'CE', full: 'Customer Edge router', ro: 'routerul clientului',
     what: 'Routerul clientului, aflat la marginea site-ului, conectat la rețeaua providerului.',
     how: 'Nu știe nimic despre MPLS: schimbă rute cu routerul PE prin rutare statică, OSPF, EIGRP sau BGP și trimite pachete IP normale.',

@@ -544,7 +544,7 @@ export function ConnectedRoutes() {
       <circle cx={232} cy={130} r={7} fill="var(--warn)" />
       <T x={190} y={164} size={11} color="var(--text-2)">G0/0 = 192.168.10.1/26</T>
       <line x1={239} y1={130} x2={380} y2={130} stroke="var(--warn)" strokeWidth={1.4} strokeDasharray="3 3" />
-      <rect x={380} y={40} width={310} height={150} rx={12} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={380} y={40} width={310} height={150} rx={12} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={396} y={66} size={12} anchor="start" m color="var(--text-2)">R1# show ip route connected</T>
       <T x={396} y={98} size={12} anchor="start" m color="var(--accent)">C  192.168.10.0/26 … G0/0</T>
       <T x={396} y={122} size={12} anchor="start" m color="var(--warn)">L  192.168.10.1/32 … G0/0</T>
