@@ -1,0 +1,96 @@
+import type { GlossaryEntry } from '../../lib/types';
+
+// Termeni pentru 5.9 (WPA, WPA2, WPA3). `wep`, `wpa`, `wpa2`, `wpa3`, `tkip`, `ccmp`, `gcmp`, `aes`, `sae`, `owe`, `psk`, `pmf`, `dot1x`, `eap`, `pmk`, `ptk`, `rogue-ap` sunt deja definiți (1.11, 2.x) și doar referiți.
+export const TERMS: GlossaryEntry[] = [
+  {
+    id: 'wpa-personal', abbr: 'WPA-Personal', ro: 'modul Personal (parolă comună)',
+    what: 'Modul de securitate Wi-Fi în care toți clienții folosesc aceeași parolă: PSK la WPA/WPA2, SAE la WPA3.',
+    how: 'Din parolă și SSID se derivă cheia-master (PMK); apoi un handshake stabilește chei unice de sesiune. Simplu de pus în practică (fără server), dar parola este comună, iar pentru revocarea unui singur utilizator trebuie schimbată pentru toți.',
+    where: 'Acasă, SOHO, rețele de oaspeți mici.',
+    topics: ['5.9', '5.10', '1.11'], aliases: ['Personal', 'PSK mode'],
+  },
+  {
+    id: 'wpa-enterprise', abbr: 'WPA-Enterprise', ro: 'modul Enterprise (802.1X)',
+    what: 'Modul de securitate Wi-Fi în care fiecare utilizator sau dispozitiv se autentifică individual prin 802.1X/EAP față de un server RADIUS.',
+    how: 'AP/WLC este authenticator, serverul RADIUS (de exemplu ISE) validează credențialele sau certificatele și trimite cheia de sesiune; din ea rezultă PMK-ul unic pe utilizator. Permite revocare individuală, politici pe grup (VLAN/ACL) și accounting.',
+    where: 'Rețele de companie.',
+    topics: ['5.9', '5.8', '2.9'], aliases: ['Enterprise', '802.1X mode'],
+  },
+  {
+    id: 'eap-tls', abbr: 'EAP-TLS', ro: 'EAP cu certificate pe ambele părți',
+    what: 'Metodă EAP în care atât serverul, cât și clientul prezintă certificate digitale, autentificându-se reciproc.',
+    how: 'Se stabilește un tunel TLS cu autentificare mutuală; nu există parolă de utilizator care să poată fi ghicită. Cere o PKI cu certificate emise pentru fiecare client.',
+    where: 'Rețele cu cerințe înalte de securitate; considerată cea mai puternică metodă EAP uzuală.',
+    topics: ['5.9'],
+  },
+  {
+    id: 'peap', abbr: 'PEAP', full: 'Protected EAP', ro: 'EAP protejat',
+    what: 'Metodă EAP care creează mai întâi un tunel TLS autentificat prin certificatul serverului și, înăuntru, autentifică utilizatorul (de obicei cu MSCHAPv2: utilizator + parolă).',
+    how: 'Clientul trebuie să valideze certificatul serverului; dacă nu o face, este vulnerabil la servere false (evil twin). Nu cere certificat pe client, deci este ușor de implementat.',
+    where: 'Companii care folosesc conturi de domeniu (Active Directory).',
+    topics: ['5.9'],
+  },
+  {
+    id: 'eap-fast', abbr: 'EAP-FAST', full: 'EAP Flexible Authentication via Secure Tunneling', ro: 'EAP Cisco cu tunel și PAC',
+    what: 'Metodă EAP dezvoltată de Cisco: creează un tunel securizat folosind un PAC (Protected Access Credential) în loc de certificat de server.',
+    how: 'Evită nevoia de certificate de server obligatorii și a fost gândită ca înlocuitor pentru LEAP. Apoi autentifică utilizatorul în interiorul tunelului.',
+    where: 'Medii Cisco; de recunoscut la CCNA.',
+    topics: ['5.9'],
+  },
+  {
+    id: 'leap', abbr: 'LEAP', full: 'Lightweight EAP', ro: 'EAP ușor (Cisco, vechi)',
+    what: 'Metodă EAP proprietară Cisco, veche, bazată pe MS-CHAP, considerată nesigură.',
+    how: 'Schimbul de autentificare poate fi atacat prin dicționar offline; nu se mai recomandă. A fost înlocuită de EAP-FAST, PEAP sau EAP-TLS.',
+    where: 'Istoric; apare la examen ca exemplu de metodă „de evitat”.',
+    topics: ['5.9'],
+  },
+  {
+    id: 'forward-secrecy', abbr: 'Forward secrecy', ro: 'confidențialitate înainte',
+    what: 'Proprietatea prin care aflarea ulterioară a parolei (sau a cheii pe termen lung) nu permite decriptarea traficului capturat în trecut.',
+    how: 'Se obține prin chei de sesiune derivate dintr-un schimb efemer (Diffie-Hellman). WPA3-Personal (SAE) o oferă; la WPA2-PSK cheile derivă din parola fixă, deci cine află parola și are un handshake capturat poate decripta acel trafic.',
+    where: 'Argument central pentru WPA3 față de WPA2.',
+    topics: ['5.9', '5.5'], aliases: ['PFS'],
+  },
+  {
+    id: 'offline-dictionary-attack', abbr: 'Atac de dicționar offline', ro: 'ghicirea parolei fără a interacționa cu ținta',
+    what: 'Atac în care atacatorul capturează un schimb criptografic (de exemplu 4-way handshake WPA2) și testează local, fără limită, milioane de parole.',
+    how: 'Fiecare parolă candidat este trecută prin aceeași derivare (PBKDF2 cu SSID-ul ca salt) și comparată cu handshake-ul capturat. Nu se declanșează alarme, iar viteza depinde doar de hardware-ul atacatorului. SAE elimină posibilitatea: fiecare ghicire cere o interacțiune online cu AP-ul.',
+    where: 'WPA2-Personal cu parole slabe.',
+    topics: ['5.9', '5.4'],
+  },
+  {
+    id: 'evil-twin', abbr: 'Evil twin', ro: 'AP-geamăn rău intenționat',
+    what: 'Un punct de acces al atacatorului care folosește același SSID ca o rețea legitimă pentru a păcăli clienții să se conecteze la el.',
+    how: 'Atacatorul poate intercepta sau modifica traficul sau poate cere credențiale. Apărare: la Enterprise, clientul validează certificatul serverului RADIUS; WIPS detectează AP-urile suspecte; evitarea rețelelor deschise.',
+    where: 'Spații publice, Wi-Fi de cafenea, aeroporturi.',
+    topics: ['5.9', '5.1'],
+  },
+  {
+    id: 'deauth-attack', abbr: 'Deauthentication attack', ro: 'atac de deconectare',
+    what: 'Atac în care cadre de management „deauthentication” falsificate deconectează forțat clienții de la AP.',
+    how: 'Cadrele de management erau neautentificate la WPA/WPA2 clasic, deci oricine putea să le falsifice. 802.11w (PMF) le protejează; la WPA3 PMF este obligatoriu.',
+    where: 'DoS asupra Wi-Fi sau pas premergător capturării unui handshake.',
+    topics: ['5.9'], aliases: ['deauth'],
+  },
+  {
+    id: 'wpa3-transition-mode', abbr: 'WPA3 transition mode', ro: 'modul de tranziție WPA2/WPA3',
+    what: 'Configurație în care același SSID acceptă atât clienți WPA3-Personal (SAE), cât și clienți WPA2-Personal (PSK).',
+    how: 'Ușurează migrarea, dar protecția este cea a celui mai slab membru: clienții WPA2 rămân expuși la dicționar offline, iar PMF este doar opțional pentru ei. Se folosește temporar.',
+    where: 'Migrarea de la WPA2 la WPA3.',
+    topics: ['5.9'], aliases: ['transition mode'],
+  },
+  {
+    id: 'cnsa-192', abbr: 'WPA3-Enterprise 192-bit', ro: 'modul de 192 de biți (suita CNSA)',
+    what: 'Mod opțional WPA3-Enterprise cu algoritmi de nivel înalt (GCMP-256, ECDH/ECDSA pe 384 de biți, HMAC-SHA-384), aliniat la suita CNSA.',
+    how: 'Cere un server RADIUS și clienți care suportă suita și o infrastructură PKI compatibilă. Este mod opțional, nu implicit.',
+    where: 'Medii guvernamentale, financiare, cu cerințe stricte.',
+    topics: ['5.9'], aliases: ['192-bit mode', 'CNSA'],
+  },
+  {
+    id: 'akm', abbr: 'AKM', full: 'Authentication and Key Management', ro: 'autentificare și management al cheilor',
+    what: 'Parametrul care indică ce metodă de autentificare/derivare de chei folosește o rețea Wi-Fi: PSK, 802.1X, SAE, FT etc.',
+    how: 'În GUI-ul WLC apare ca „Auth Key Mgmt” (PSK, 802.1X, CCKM, FT, SAE). Împreună cu politica de criptare (AES/CCMP, GCMP) definește complet securitatea Layer 2 a unui WLAN.',
+    where: 'Securitatea Layer 2 a unui WLAN pe WLC (vezi 5.10).',
+    topics: ['5.9', '5.10', '2.9'], aliases: ['Auth Key Mgmt'],
+  },
+];

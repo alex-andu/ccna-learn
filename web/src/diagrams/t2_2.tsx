@@ -29,7 +29,7 @@ export function TrunkWhy() {
             <T x={360} y={96} size={11} weight={700} color="var(--warn)">Trunk 802.1Q · Gi0/1 ⟷ Gi0/1</T>
             {[{ v: 10, x: 250 }, { v: 20, x: 360 }, { v: 30, x: 470 }].map((f) => (
               <g key={f.v}>
-                <rect x={f.x - 38} y={122} width={76} height={24} rx={5} fill="var(--code-bg)" stroke={VCOL[f.v]} strokeWidth={1.8} />
+                <rect x={f.x - 38} y={122} width={76} height={24} rx={5} fill="var(--surface-2)" stroke={VCOL[f.v]} strokeWidth={1.8} />
                 <T x={f.x} y={138} size={10.5} m color={VCOL[f.v]}>{`tag VID ${f.v}`}</T>
               </g>
             ))}
@@ -81,7 +81,7 @@ export function Dot1qFrame() {
         })}
         {tag && <T x={360} y={30} size={11} weight={700} color="var(--warn)">tag 802.1Q = TPID (2 B) + TCI (PCP 3 b · DEI 1 b · VID 12 b) = 4 octeți</T>}
         {!tag && <T x={360} y={30} size={11} weight={700} color="var(--text-2)">Cadru Ethernet II obișnuit: 64–1518 octeți</T>}
-        <rect x={60} y={134} width={600} height={52} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={60} y={134} width={600} height={52} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={76} y={156} anchor="start" size={11.5} weight={700} color={cur.c}>{cur.label}</T>
         <T x={76} y={174} anchor="start" size={11} color="var(--text-2)">{cur.d}</T>
       </svg>
@@ -108,7 +108,7 @@ export function NativeVlanSim() {
         <T x={360} y={68} size={11} m color={ok ? 'var(--ok)' : 'var(--bad)'}>{`native ${a}  ⟷  native ${b}`}</T>
         <T x={130} y={112} size={10.5} m color="var(--muted)">{`native VLAN ${a}`}</T>
         <T x={590} y={112} size={10.5} m color="var(--muted)">{`native VLAN ${b}`}</T>
-        <rect x={60} y={132} width={600} height={80} rx={9} fill="var(--code-bg)" stroke={ok ? 'var(--ok)' : 'var(--bad)'} strokeWidth={1.6} />
+        <rect x={60} y={132} width={600} height={80} rx={9} fill="var(--surface-2)" stroke={ok ? 'var(--ok)' : 'var(--bad)'} strokeWidth={1.6} />
         {ok ? (
           <g>
             <T x={78} y={156} anchor="start" size={11.5} weight={700} color="var(--ok)">Native VLAN potrivit</T>
@@ -170,13 +170,13 @@ export function DoubleTag() {
       <ClientIcon x={660} y={110} kind="pc" label="Victimă (VLAN 20)" />
       <Line x1={80} y1={110} x2={118} y2={110} />
       <Line x1={602} y1={110} x2={632} y2={110} />
-      <rect x={30} y={160} width={200} height={34} rx={6} fill="var(--code-bg)" stroke="var(--bad)" />
+      <rect x={30} y={160} width={200} height={34} rx={6} fill="var(--surface-2)" stroke="var(--bad)" />
       <T x={130} y={174} size={10} m color="var(--bad)">[tag 1][tag 20][date]</T>
       <T x={130} y={188} size={9.5} color="var(--muted)">atacatorul trimite două tag-uri</T>
-      <rect x={260} y={160} width={200} height={34} rx={6} fill="var(--code-bg)" stroke="var(--warn)" />
+      <rect x={260} y={160} width={200} height={34} rx={6} fill="var(--surface-2)" stroke="var(--warn)" />
       <T x={360} y={174} size={10} m color="var(--warn)">[tag 20][date]</T>
       <T x={360} y={188} size={9.5} color="var(--muted)">SW1 scoate tag 1 (nativ) — fără tag nou</T>
-      <rect x={490} y={160} width={200} height={34} rx={6} fill="var(--code-bg)" stroke="var(--ok)" />
+      <rect x={490} y={160} width={200} height={34} rx={6} fill="var(--surface-2)" stroke="var(--ok)" />
       <T x={590} y={174} size={10} m color="var(--ok)">[date] → VLAN 20</T>
       <T x={590} y={188} size={9.5} color="var(--muted)">SW2 vede tag 20 și livrează în VLAN 20</T>
       <T x={360} y={228} size={11} color="var(--muted)">Atacul merge într-un singur sens; se previne cu un native VLAN neutilizat și porturi access setate explicit.</T>

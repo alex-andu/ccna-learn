@@ -11,7 +11,7 @@ const T = (p: { x: number; y: number; children: ReactNode; size?: number; anchor
 );
 const Wrap = ({ children }: { children: ReactNode }) => <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>{children}</div>;
 const preStyle: React.CSSProperties = {
-  margin: 0, padding: '12px 14px', borderRadius: 12, background: 'var(--code-bg)', border: '1px solid var(--border)',
+  margin: 0, padding: '12px 14px', borderRadius: 12, background: 'var(--surface-2)', border: '1px solid var(--border)',
   fontSize: 12.5, lineHeight: 1.6, overflowX: 'auto', color: 'var(--text-2)', ...mono,
 };
 const panel: React.CSSProperties = { marginTop: 12, padding: '12px 14px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface-2)' };

@@ -47,7 +47,7 @@ export function NeighborScope() {
         <T x={175} y={62} size={9.5} m color="var(--muted)">Fa0/24</T><T x={350} y={62} size={9.5} m color="var(--muted)">Gi0/1</T><T x={530} y={62} size={9.5} m color="var(--muted)">Fa0/5</T>
         {(['R1', 'SW1', 'SW2', 'IP-PHONE'] as Dev[]).map(icon)}
         <T x={360} y={142} size={11} color="var(--muted)">{`Click pe un dispozitiv: ${dev} vede (verde) doar vecinii conectați DIRECT. Cadrele de descoperire nu sunt retransmise mai departe.`}</T>
-        <rect x={30} y={156} width={660} height={128} rx={9} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={30} y={156} width={660} height={128} rx={9} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={44} y={176} anchor="start" size={11} m color="var(--text-2)">{`${dev}# show ${proto} neighbors`}</T>
         <T x={44} y={194} anchor="start" size={10.5} m color="var(--muted)">{proto === 'cdp' ? 'Device ID    Local Intrfce  Holdtme  Capability  Platform    Port ID' : 'Device ID    Local Intf    Hold-time  Capability  Port ID'}</T>
         {rows.map((r, i) => (
@@ -84,7 +84,7 @@ export function LldpFrame() {
   return (
     <svg viewBox="0 0 720 230" role="img" aria-label="Structura unui cadru LLDP: TLV-uri obligatorii și opționale">
       <T x={360} y={22} weight={700} size={12}>Cadru LLDP (EtherType 0x88CC) — o secvență de TLV-uri</T>
-      <rect x={20} y={36} width={680} height={28} rx={5} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={20} y={36} width={680} height={28} rx={5} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={30} y={54} anchor="start" size={10.5} m color="var(--muted)">Dst MAC 01-80-C2-00-00-0E (multicast, link-local) · Src MAC · EtherType 0x88CC</T>
       {TLVS.map((t) => {
         const x0 = x; x += t.w;
@@ -98,7 +98,7 @@ export function LldpFrame() {
           </g>
         );
       })}
-      <rect x={60} y={150} width={600} height={62} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={60} y={150} width={600} height={62} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={76} y={172} anchor="start" size={11.5} weight={700} color={cur.req ? 'var(--warn)' : 'var(--info)'}>{cur.label}</T>
       <T x={76} y={192} anchor="start" size={10.5} color="var(--text-2)">{cur.d}</T>
     </svg>

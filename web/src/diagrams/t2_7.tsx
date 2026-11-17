@@ -24,7 +24,7 @@ export function WlcPorts() {
   );
   return (
     <svg viewBox="0 0 720 220" role="img" aria-label="Panoul unui WLC cu porturile principale">
-      <rect x={20} y={20} width={680} height={86} rx={10} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={20} y={20} width={680} height={86} rx={10} fill="var(--surface-2)" stroke="var(--border)" />
       {box('console', 36, 110, 'Console', 'RJ-45/USB')}
       {box('service', 160, 130, 'Service port', 'OOB mgmt')}
       {box('redundancy', 304, 130, 'Redundancy port', 'HA pair')}
@@ -63,7 +63,7 @@ export function WlanToVlan() {
         <rect x={410} y={56} width={130} height={44} rx={8} fill="var(--surface-3)" stroke="var(--info)" strokeWidth={2} /><T x={475} y={76} weight={700}>trunk 802.1Q</T><T x={475} y={92} size={10} m color={d.col}>{`tag VLAN ${d.vlan}`}</T>
         <Line x1={540} y1={78} x2={580} y2={78} c={d.col} w={2.5} />
         <SwitchIcon x={625} y={78} label="Switch" />
-        <rect x={40} y={130} width={640} height={72} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={40} y={130} width={640} height={72} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={54} y={152} anchor="start" size={11} weight={700}>{`Clientul din SSID ${d.ssid} primește adresă din ${d.sub} (VLAN ${d.vlan})`}</T>
         <T x={54} y={170} anchor="start" size={10.5} color="var(--text-2)">Dacă VLAN-ul {d.vlan} nu este permis pe trunk-ul dintre WLC și switch (sau nu există pe switch), clientul se asociază, dar nu primește IP.</T>
         <T x={54} y={188} anchor="start" size={10.5} color="var(--text-2)">În modul Local, AP-ul nu vede VLAN-ul clientului: tot traficul clienților merge în CAPWAP, iar WLC-ul îl pune pe VLAN.</T>

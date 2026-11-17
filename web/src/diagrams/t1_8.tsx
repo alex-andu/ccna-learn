@@ -279,7 +279,7 @@ export function AbbrevTrainer() {
         <span className="badge accent">Scor: {score.ok} / {score.total}</span>
       </div>
       <p className="small muted" style={{ margin: '0 0 6px' }}>{mode === 'compress' ? 'Scrie forma comprimată canonică (cea mai scurtă, RFC 5952):' : 'Scrie forma completă (8 hextete × 4 cifre):'}</p>
-      <div className="mono" style={{ fontSize: '1.05rem', padding: '10px 12px', borderRadius: 10, background: 'var(--code-bg)', border: '1px solid var(--border)', wordBreak: 'break-all', color: 'var(--accent)' }}>{shown}</div>
+      <div className="mono" style={{ fontSize: '1.05rem', padding: '10px 12px', borderRadius: 10, background: 'var(--surface-2)', border: '1px solid var(--border)', wordBreak: 'break-all', color: 'var(--accent)' }}>{shown}</div>
       <div className="row" style={{ marginTop: 10 }}>
         <input className="input mono" style={{ flex: '1 1 260px', minWidth: 0 }} value={val} placeholder={mode === 'compress' ? 'ex. 2001:db8::1' : 'ex. 2001:0db8:0000:…'} spellCheck={false} autoCapitalize="off" autoCorrect="off"
           onChange={(e) => setVal(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { if (res) next(); else check(); } }} aria-label="Răspunsul tău" />

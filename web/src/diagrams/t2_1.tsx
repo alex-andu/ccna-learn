@@ -58,7 +58,7 @@ export function VoicePort() {
       <T x={230} y={110} size={10.5} color="var(--accent)" weight={650}>VLAN 10 (date) fără tag</T>
       <T x={470} y={72} size={10.5} color="var(--accent)" weight={650}>VLAN 10 fără tag</T>
       <T x={470} y={110} size={10.5} color="var(--muted)">(PC-ul nu știe de VLAN-uri)</T>
-      <rect x={60} y={150} width={600} height={80} rx={9} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={60} y={150} width={600} height={80} rx={9} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={78} y={172} anchor="start" size={11} m color="var(--text-2)">interface FastEthernet0/3</T>
       <T x={78} y={190} anchor="start" size={11} m color="var(--text)">{' switchport mode access'}</T>
       <T x={78} y={207} anchor="start" size={11} m color="var(--accent)">{' switchport access vlan 10'}</T>
@@ -130,7 +130,7 @@ export function DefaultVlanPorts() {
           const v = vOf(p);
           return (
             <g key={p}>
-              <rect x={50 + i * 53} y={46} width={40} height={30} rx={4} fill="var(--code-bg)" stroke={col(v)} strokeWidth={2} />
+              <rect x={50 + i * 53} y={46} width={40} height={30} rx={4} fill="var(--surface-2)" stroke={col(v)} strokeWidth={2} />
               <T x={70 + i * 53} y={65} size={10} m>{`Fa0/${p}`}</T>
               <T x={70 + i * 53} y={92} size={9.5} m color={col(v)}>{String(v)}</T>
             </g>

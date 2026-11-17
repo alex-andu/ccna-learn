@@ -653,7 +653,7 @@ export function TwoSwitches({ lab = false }: { lab?: boolean }) {
   const rowsR = [['00aa.aaaa.aaaa', 'Gi0/1'], ['00bb.bbbb.bbbb', 'Gi0/1'], ['00cc.cccc.cccc', 'Fa0/1'], ['00dd.dddd.dddd', 'Fa0/2']];
   const Tab = ({ x, rows, title }: { x: number; rows: string[][]; title: string }) => (
     <g>
-      <rect x={x} y={150} width={250} height={112} rx={9} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={x} y={150} width={250} height={112} rx={9} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={x + 12} y={170} anchor="start" size={11} weight={700} color="var(--text-2)">{title}</T>
       {rows.map(([mac, p], i) => (
         <g key={mac}>

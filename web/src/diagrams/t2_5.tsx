@@ -117,7 +117,7 @@ export function Handshake() {
         {s === 2 && <T x={580} y={122} size={11} color="var(--warn)">sync: porturile non-edge ⇒ Discarding</T>}
         <T x={150} y={110} size={10.5} m color="var(--muted)">{s === 4 ? 'Designated · Forwarding' : 'Designated · Discarding'}</T>
         <T x={580} y={140} size={10.5} m color="var(--muted)">{s >= 3 ? 'Root Port' : 'port în așteptare'}</T>
-        <rect x={40} y={150} width={640} height={40} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={40} y={150} width={640} height={40} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={52} y={168} anchor="start" size={11} weight={700}>{HS[s].t}</T>
         <T x={52} y={184} anchor="start" size={10} color="var(--text-2)">{HS[s].d.length > 118 ? HS[s].d.slice(0, HS[s].d.lastIndexOf(' ', 118)) + '…' : HS[s].d}</T>
       </svg>
@@ -144,7 +144,7 @@ export function Guards() {
         <SwitchIcon x={150} y={70} label="" /><T x={150} y={38} weight={700}>Switch</T>
         <ClientIcon x={600} y={70} kind="pc" label={g === 'rootguard' || g === 'loopguard' ? 'Switch vecin' : 'Host / switch neautorizat'} />
         <Line x1={182} y1={70} x2={568} y2={70} c={d.col} w={3} />
-        <rect x={50} y={116} width={620} height={84} rx={9} fill="var(--code-bg)" stroke={d.col} strokeWidth={1.6} />
+        <rect x={50} y={116} width={620} height={84} rx={9} fill="var(--surface-2)" stroke={d.col} strokeWidth={1.6} />
         <T x={64} y={136} anchor="start" size={12} weight={700} color={d.col}>{d.name}</T>
         <T x={64} y={154} anchor="start" size={10.5} color="var(--text-2)">{`Unde: ${d.where}`}</T>
         <T x={64} y={170} anchor="start" size={10.5} color="var(--text-2)">{`Declanșator: ${d.trigger}`}</T>

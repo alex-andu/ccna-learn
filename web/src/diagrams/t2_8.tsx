@@ -25,7 +25,7 @@ export function MethodPicker() {
         <RouterIcon x={610} y={60} label="Echipament" />
         <T x={340} y={50} size={11} weight={700} color={d.col}>{d.name}</T>
         <T x={340} y={78} size={10} m color="var(--muted)">{d.port}</T>
-        <rect x={40} y={110} width={640} height={66} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={40} y={110} width={640} height={66} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={54} y={130} anchor="start" size={11} weight={700} color={d.col}>{`${d.enc ? '🔒 criptat' : (m === 'console' ? 'conexiune locală' : '⚠ în clar')} · ${d.path}`}</T>
         <T x={54} y={148} anchor="start" size={10.5} color="var(--text-2)">{d.use.length > 112 ? d.use.slice(0, d.use.lastIndexOf(' ', 112)) : d.use}</T>
         <T x={54} y={164} anchor="start" size={10.5} color="var(--text-2)">{d.use.length > 112 ? d.use.slice(d.use.lastIndexOf(' ', 112) + 1) : ''}</T>
@@ -88,7 +88,7 @@ export function AaaCompare() {
         <Line x1={105} y1={60} x2={296} y2={60} /><T x={200} y={50} size={10} color="var(--muted)">1 · SSH login</T>
         <Line x1={364} y1={60} x2={540} y2={60} c="var(--accent)" w={2.5} /><T x={452} y={50} size={10} color="var(--accent)">{`2 · ${d.name} ${d.proto}/${d.port.split(' ')[0]}`}</T>
         <T x={452} y={76} size={9.5} color="var(--muted)">3 · accept / reject (+ atribute)</T>
-        <rect x={40} y={110} width={640} height={110} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={40} y={110} width={640} height={110} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={54} y={130} anchor="start" size={11.5} weight={700}>{d.name}</T>
         <T x={54} y={148} anchor="start" size={10.5} color="var(--text-2)">{`Transport: ${d.proto} · port ${d.port}`}</T>
         <T x={54} y={164} anchor="start" size={10.5} color="var(--text-2)">{`Criptare: ${d.enc}`}</T>

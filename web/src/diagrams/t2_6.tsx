@@ -117,7 +117,7 @@ export function CapwapJoin() {
         <APIcon x={110} y={60} label="LAP" /><rect x={540} y={36} width={130} height={48} rx={8} fill="var(--surface-3)" stroke="var(--accent)" strokeWidth={1.8} /><T x={605} y={65} weight={700}>WLC</T>
         <Line x1={150} y1={60} x2={540} y2={60} c={s >= 3 ? 'var(--ok)' : 'var(--text-2)'} w={s >= 3 ? 3 : 2} dash={s >= 3 ? undefined : '6 5'} flow={s >= 5} />
         <T x={345} y={50} size={11} m color="var(--accent)">{j.x}</T>
-        <rect x={30} y={110} width={660} height={68} rx={8} fill="var(--code-bg)" stroke="var(--border)" />
+        <rect x={30} y={110} width={660} height={68} rx={8} fill="var(--surface-2)" stroke="var(--border)" />
         <T x={44} y={130} anchor="start" size={12} weight={700}>{j.t}</T>
         <T x={44} y={148} anchor="start" size={10.5} color="var(--text-2)">{j.d.length > 120 ? j.d.slice(0, j.d.lastIndexOf(' ', 120)) : j.d}</T>
         {j.d.length > 120 && <T x={44} y={164} anchor="start" size={10.5} color="var(--text-2)">{j.d.slice(j.d.lastIndexOf(' ', 120) + 1)}</T>}

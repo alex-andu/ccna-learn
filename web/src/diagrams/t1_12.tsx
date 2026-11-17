@@ -307,7 +307,7 @@ export function DockerFlow() {
   return (
     <svg viewBox="0 0 720 260" width="100%" role="img" aria-label="De la Dockerfile la containere">
       <defs><marker id="dkArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-2)" /></marker></defs>
-      <rect x={20} y={40} width={130} height={120} rx={10} fill="var(--code-bg)" stroke="var(--border)" />
+      <rect x={20} y={40} width={130} height={120} rx={10} fill="var(--surface-2)" stroke="var(--border)" />
       <T x={85} y={30} weight={700}>Dockerfile</T>
       {['FROM python:3.12-slim', 'COPY app.py /app/', 'RUN pip install flask', 'CMD python /app/app.py'].map((l, i) => (
         <T key={l} x={28} y={64 + i * 24} anchor="start" size={8.6} mono color="var(--text-2)">{l}</T>

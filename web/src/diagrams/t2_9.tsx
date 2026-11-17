@@ -48,12 +48,12 @@ export function WlanGuiMock() {
   const fields = GUI[tab];
   const f = fields[Math.min(i, fields.length - 1)];
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', background: 'var(--code-bg)' }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', background: 'var(--surface-2)' }}>
       <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface-3)', fontWeight: 700, fontSize: 13 }}>WLANs › Edit ‘CORP-WLAN’ (ilustrativ, stil AireOS)</div>
       <div role="tablist" aria-label="Taburile WLAN" style={{ display: 'flex', gap: 2, padding: '6px 8px 0', background: 'var(--surface-3)', flexWrap: 'wrap' }}>
         {TABS.map(([k, l]) => (
           <button key={k} type="button" role="tab" aria-selected={tab === k} onClick={() => { setTab(k); setI(0); }}
-            style={{ padding: '6px 14px', border: '1px solid var(--border)', borderBottom: tab === k ? '1px solid var(--code-bg)' : '1px solid var(--border)', borderRadius: '6px 6px 0 0', background: tab === k ? 'var(--code-bg)' : 'transparent', color: tab === k ? 'var(--accent)' : 'var(--text-2)', fontWeight: tab === k ? 700 : 500, cursor: 'pointer', fontSize: 13 }}>{l}</button>
+            style={{ padding: '6px 14px', border: '1px solid var(--border)', borderBottom: tab === k ? '1px solid var(--surface-2)' : '1px solid var(--border)', borderRadius: '6px 6px 0 0', background: tab === k ? 'var(--surface-2)' : 'transparent', color: tab === k ? 'var(--accent)' : 'var(--text-2)', fontWeight: tab === k ? 700 : 500, cursor: 'pointer', fontSize: 13 }}>{l}</button>
         ))}
       </div>
       <div style={{ padding: 10 }}>
@@ -149,7 +149,7 @@ export function SecurityPicker() {
         <Line x1={100} y1={50} x2={310} y2={50} c={d.col} w={3} />
         <rect x={310} y={28} width={90} height={44} rx={8} fill="var(--surface-3)" stroke="var(--accent)" strokeWidth={1.8} /><T x={355} y={55} weight={700}>AP → WLC</T>
         {s === 'ent' || s === 'wpa3' ? (<g><Line x1={400} y1={50} x2={560} y2={50} c="var(--accent)" w={2} dash="5 4" /><rect x={560} y={28} width={120} height={44} rx={8} fill="var(--surface-3)" stroke="var(--ok)" strokeWidth={1.8} /><T x={620} y={55} weight={700}>RADIUS</T></g>) : null}
-        <rect x={30} y={96} width={660} height={84} rx={8} fill="var(--code-bg)" stroke={d.col} strokeWidth={1.6} />
+        <rect x={30} y={96} width={660} height={84} rx={8} fill="var(--surface-2)" stroke={d.col} strokeWidth={1.6} />
         <T x={44} y={116} anchor="start" size={12} weight={700} color={d.col}>{d.n}</T>
         <T x={44} y={134} anchor="start" size={10.5} color="var(--text-2)">{`Autentificare: ${d.auth}`}</T>
         <T x={44} y={152} anchor="start" size={10.5} color="var(--text-2)">{`Câmpuri în GUI: ${d.need.length > 108 ? d.need.slice(0, d.need.lastIndexOf(' ', 108)) + '…' : d.need}`}</T>

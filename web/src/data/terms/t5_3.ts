@@ -1,0 +1,96 @@
+import type { GlossaryEntry } from '../../lib/types';
+
+// Termeni pentru 5.3 (acces local cu parole). `console-port`, `vty`, `login-local`, `exec-timeout`, `rsa-keypair` (alte topicuri) sunt doar referiți.
+export const TERMS: GlossaryEntry[] = [
+  {
+    id: 'user-exec', abbr: 'User EXEC', ro: 'modul EXEC utilizator (>)',
+    what: 'Primul mod în care ajungi după autentificare: prompt „>”, nivel de privilegiu 1, comenzi limitate (de exemplu ping, câteva show).',
+    how: 'Trecerea în modul privilegiat se face cu comanda enable și parola enable secret (sau implicit, cu un cont cu privilege 15).',
+    where: 'Prima etapă a oricărei sesiuni pe console sau VTY pe echipamente Cisco IOS.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'privileged-exec', abbr: 'Privileged EXEC', ro: 'modul EXEC privilegiat (#)',
+    what: 'Modul cu prompt „#”, nivel de privilegiu 15: toate comenzile show/debug și accesul la configurarea globală (configure terminal).',
+    how: 'Se intră cu enable (după user EXEC), protejat de enable secret; un cont cu privilege 15 intră direct aici.',
+    where: 'Administrarea completă a routerelor și switch-urilor; parola lui este cea mai importantă din dispozitiv.',
+    topics: ['5.3'], aliases: ['enable mode'],
+  },
+  {
+    id: 'privilege-level', abbr: 'Privilege level', ro: 'nivel de privilegiu (0–15)',
+    what: 'Număr de la 0 la 15 care stabilește ce comenzi poate rula un utilizator. Implicit: 1 = user EXEC, 15 = privileged EXEC.',
+    how: 'Comenzile pot fi mutate la niveluri intermediare cu privilege exec level, iar utilizatorii primesc un nivel cu username … privilege N sau enable N; se aplică principiul least privilege.',
+    where: 'Conturi locale, delegarea de drepturi limitate unor operatori.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'enable-secret', abbr: 'enable secret', ro: 'parola hashuită a modului privilegiat',
+    what: 'Comandă care stabilește parola pentru enable, stocată ca hash (tip 5 implicit pe multe versiuni; tip 8/9 cu algorithm-type).',
+    how: 'Are prioritate față de enable password: dacă ambele există, doar secret este cerută. Se recomandă să elimini enable password cu no enable password.',
+    where: 'Orice router sau switch Cisco; prima comandă de hardening.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'enable-password', abbr: 'enable password', ro: 'parola nehashuită a modului privilegiat',
+    what: 'Comandă veche care stochează parola enable în clar (sau tip 7 reversibil cu service password-encryption).',
+    how: 'Este ignorată dacă există enable secret, dar rămâne vizibilă în configurație; trebuie eliminată.',
+    where: 'Configurații vechi; de evitat.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'service-password-encryption', abbr: 'service password-encryption', ro: 'cifrarea (tip 7) a parolelor în clar',
+    what: 'Comandă globală care transformă parolele în clar din configurație (parole de linie, enable password, username … password) în tip 7.',
+    how: 'Aplică un cifru reversibil Cisco, ușor de decriptat cu unelte publice: ferește doar de citirea întâmplătoare, nu de un atacator care are configurația. Nu modifică parolele de tip secret.',
+    where: 'Configurații care mai au parole de linie în clar; nu înlocuiește secret.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'password-type-7', abbr: 'Type 7 password', ro: 'parolă tip 7 (cifru Cisco reversibil)',
+    what: 'Reprezentare ofuscată a unei parole, produsă de service password-encryption (de exemplu „password 7 0822455D0A16”).',
+    how: 'Se bazează pe un cifru Vigenère simplu cu cheie fixă; oricine poate reveni la parola în clar. Nu este un hash.',
+    where: 'Parole de linie și enable password într-o configurație cu service password-encryption.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'password-hash', abbr: 'Password hash (type 5/8/9)', ro: 'hash de parolă (tipurile 5, 8, 9)',
+    what: 'Valoare unidirecțională calculată din parolă; echipamentul compară hash-ul parolei introduse cu cel stocat, fără să păstreze parola.',
+    how: 'Tip 5 = MD5 cu salt (rapid, slab pe hardware modern); tip 8 = PBKDF2-SHA256; tip 9 = scrypt (lent și cu cerințe de memorie, mai rezistent la ghicire offline). Algoritmii 8/9 depind de versiune.',
+    where: 'enable secret și username … secret, cu opțiunea algorithm-type.',
+    topics: ['5.3', '5.4'], aliases: ['scrypt', 'PBKDF2', 'MD5'],
+  },
+  {
+    id: 'local-authentication', abbr: 'Local authentication', ro: 'autentificare locală',
+    what: 'Verificarea credențialelor pe chiar dispozitivul, folosind conturile definite cu username și parolele de linie/enable, fără server extern.',
+    how: 'Se activează cu login local pe linie; este și metoda de rezervă (fallback) într-o listă AAA (aaa authentication login default group tacacs+ local).',
+    where: 'Echipamente mici, laburi, fallback; nu scalează pe zeci de echipamente (soluția: AAA, 5.8).',
+    topics: ['5.3', '5.8'],
+  },
+  {
+    id: 'login-block-for', abbr: 'login block-for', ro: 'blocare temporară a logărilor după eșecuri',
+    what: 'Comandă globală care, după un număr de încercări eșuate într-o fereastră de timp, refuză toate logările pe liniile virtuale o perioadă (quiet mode).',
+    how: 'De exemplu login block-for 120 attempts 3 within 60: 3 eșecuri în 60 s → blocare 120 s. Adrese de încredere pot fi excluse cu login quiet-mode access-class; se verifică cu show login.',
+    where: 'Protecția VTY împotriva atacurilor de ghicire a parolelor.',
+    topics: ['5.3', '5.4'],
+  },
+  {
+    id: 'quiet-mode', abbr: 'Quiet mode', ro: 'perioada de blocare a logărilor',
+    what: 'Starea în care un echipament refuză încercările de login (chiar cu parola corectă) după declanșarea login block-for.',
+    how: 'Durează cât a fost configurat; o listă de acces poate permite anumite surse. Încetinește drastic atacurile de forță brută.',
+    where: 'Liniile virtuale (VTY) ale routerelor și switch-urilor.',
+    topics: ['5.3'],
+  },
+  {
+    id: 'login-banner', abbr: 'Banner (motd/login/exec)', ro: 'mesaj de avertizare la conectare',
+    what: 'Text afișat la conectare: banner motd (la conectare), banner login (înainte de autentificare), banner exec (după autentificare).',
+    how: 'Se scrie între delimitatori (de exemplu #); trebuie să avertizeze că accesul e autorizat și monitorizat, fără detalii despre echipament sau companie.',
+    where: 'Orice echipament cu acces administrativ; valoare legală și de descurajare, nu protecție tehnică.',
+    topics: ['5.3', '5.2'], aliases: ['banner motd', 'banner login'],
+  },
+  {
+    id: 'aux-port', abbr: 'AUX', full: 'Auxiliary port', ro: 'port auxiliar',
+    what: 'Port serial pe unele routere, folosit pentru acces prin modem; configurat cu line aux 0.',
+    how: 'Nu cere autentificare implicit; dacă nu e folosit, se dezactivează sau se protejează ca restul liniilor.',
+    where: 'Routere Cisco clasice; rar întâlnit azi.',
+    topics: ['5.3'],
+  },
+];

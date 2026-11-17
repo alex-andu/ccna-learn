@@ -314,7 +314,7 @@ export function Duplex() {
 
         <h3>CDP te ajută (între echipamente Cisco)</h3>
         <p><G id="cdp" /> trimite periodic vecinului informații despre port, inclusiv duplexul. Când cele două capete raportează duplexuri diferite, IOS afișează în log:</p>
-        <pre className="mono small" style={{ background: 'var(--code-bg)', padding: '10px 12px', borderRadius: 10, overflowX: 'auto', border: '1px solid var(--border)' }}>%CDP-4-DUPLEX_MISMATCH: duplex mismatch discovered on FastEthernet0/24 (not full duplex), with SW2 FastEthernet0/24 (full duplex).</pre>
+        <pre className="mono small" style={{ background: 'var(--surface-2)', padding: '10px 12px', borderRadius: 10, overflowX: 'auto', border: '1px solid var(--border)' }}>%CDP-4-DUPLEX_MISMATCH: duplex mismatch discovered on FastEthernet0/24 (not full duplex), with SW2 FastEthernet0/24 (full duplex).</pre>
         <p>Mesajul <b>doar raportează</b> — nu corectează nimic. Și funcționează doar dacă ambele capete rulează CDP (echipamente Cisco). Spre un PC sau un server, singurele indicii rămân <code>show interfaces</code> și <code>show interfaces status</code>. (Formatul exact al mesajului poate varia ușor între versiuni IOS.)</p>
 
         <h3>Cum repari</h3>
@@ -408,7 +408,7 @@ export function Cable() {
       </Detailed>
       <DeepDive title="Deep dive: testul de cablu integrat (TDR)">
         <p>Multe switch-uri Catalyst au un <G id="tdr" /> integrat. Trimite un impuls pe fiecare pereche și măsoară reflexia: o pereche întreruptă (<i>open</i>) sau în scurtcircuit (<i>short</i>) reflectă impulsul, iar din timpul de întoarcere se estimează distanța până la defect.</p>
-        <pre className="mono small" style={{ background: 'var(--code-bg)', padding: '10px 12px', borderRadius: 10, overflowX: 'auto', border: '1px solid var(--border)' }}>{`SW1# test cable-diagnostics tdr interface GigabitEthernet1/0/5
+        <pre className="mono small" style={{ background: 'var(--surface-2)', padding: '10px 12px', borderRadius: 10, overflowX: 'auto', border: '1px solid var(--border)' }}>{`SW1# test cable-diagnostics tdr interface GigabitEthernet1/0/5
 SW1# show cable-diagnostics tdr interface GigabitEthernet1/0/5
 Interface Speed Local pair Pair length        Remote pair Pair status
 --------- ----- ---------- ------------------ ----------- --------------
